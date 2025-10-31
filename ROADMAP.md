@@ -36,6 +36,17 @@ This roadmap organizes MLN development into phases with clear priorities, depend
   - Implementation: HashMap for relation lookups
   - Success: O(1) relation queries
 
+- [ ] **GPU acceleration for structural similarity** (Issue #39)
+  - Implementation: PyTorch-based parallel similarity computation
+  - Supports: CUDA (NVIDIA), MPS (Apple Silicon), CPU fallback
+  - Success: 50x speedup on CUDA, 20x on MPS
+  - See: docs/GPU_ACCELERATION.md
+
+- [ ] **GPU-accelerated graph traversal** (Issue #40)
+  - Implementation: Matrix-based parallel BFS
+  - Batch multiple queries simultaneously
+  - Success: Process 100 queries in parallel
+
 **Tests Required:**
 ```python
 def test_performance_10k_concepts():
@@ -124,6 +135,12 @@ def test_performance_10k_concepts():
       # Explain reasoning in human terms
   ```
 
+- [ ] **GPU-accelerated local LLM** (Issue #41)
+  - Run Llama/Mistral on GPU for entity extraction
+  - 4-bit quantization for memory efficiency
+  - Supports CUDA (80 tok/s) and MPS (25 tok/s)
+  - Hybrid CPU/GPU pipeline optimization
+
 **Architecture:**
 ```
 Natural Language Input
@@ -195,6 +212,11 @@ Natural Language Output + Explanation
                        mapping: Mapping) -> MKU:
       # Transfer relations/properties via isomorphism
   ```
+
+- [ ] **GPU-accelerated analogical matching** (Issue #42)
+  - Graph Neural Networks for structure embedding
+  - Parallel similarity computation across domains
+  - Hungarian algorithm for optimal mapping
 
 **Example:**
 ```python

@@ -1,0 +1,107 @@
+# GPU Acceleration Requirements for MLN
+# Install based on your hardware
+
+# ============================================================================
+# Base requirements (always needed)
+# ============================================================================
+numpy>=1.24.0
+scipy>=1.10.0
+
+# ============================================================================
+# PyTorch - Choose ONE based on your hardware
+# ============================================================================
+
+# Option 1: CUDA (NVIDIA GPUs) - Linux/Windows
+# Uncomment for CUDA 12.1:
+# --extra-index-url https://download.pytorch.org/whl/cu121
+# torch>=2.0.0
+# torchvision>=0.15.0
+# torchaudio>=2.0.0
+
+# Option 2: CUDA 11.8 (older NVIDIA GPUs)
+# Uncomment for CUDA 11.8:
+# --extra-index-url https://download.pytorch.org/whl/cu118
+# torch>=2.0.0
+# torchvision>=0.15.0
+# torchaudio>=2.0.0
+
+# Option 3: ROCm (AMD GPUs) - Linux only
+# Uncomment for ROCm:
+# --extra-index-url https://download.pytorch.org/whl/rocm5.6
+# torch>=2.0.0
+# torchvision>=0.15.0
+# torchaudio>=2.0.0
+
+# Option 4: MPS (Apple Silicon M1/M2/M3) - macOS
+# Uncomment for Apple Silicon:
+# torch>=2.0.0
+# torchvision>=0.15.0
+# torchaudio>=2.0.0
+
+# Option 5: CPU only (no GPU)
+# --extra-index-url https://download.pytorch.org/whl/cpu
+# torch>=2.0.0
+# torchvision>=0.15.0
+# torchaudio>=2.0.0
+
+# ============================================================================
+# LLM Integration (Phase 2)
+# ============================================================================
+transformers>=4.35.0
+accelerate>=0.25.0
+sentencepiece>=0.1.99  # For tokenization
+protobuf>=3.20.0
+
+# Quantization support (reduces GPU memory usage)
+bitsandbytes>=0.41.0  # CUDA only, comment out for MPS/CPU
+
+# ============================================================================
+# Advanced Features (Phase 3+)
+# ============================================================================
+torch-geometric>=2.4.0  # Graph Neural Networks
+torch-scatter>=2.1.0    # Required by torch-geometric
+torch-sparse>=0.6.0     # Required by torch-geometric
+networkx>=3.1.0         # Graph algorithms
+
+# ============================================================================
+# Utilities
+# ============================================================================
+einops>=0.7.0          # Tensor operations
+ninja>=1.11.0          # For faster compilation
+huggingface-hub>=0.19.0  # Model downloads
+
+# ============================================================================
+# Installation Instructions
+# ============================================================================
+
+# macOS (Apple Silicon):
+# 1. Uncomment MPS section above
+# 2. Comment out bitsandbytes (not supported on macOS)
+# 3. Run: pip install -r requirements-gpu.txt
+
+# Linux/Windows with NVIDIA GPU:
+# 1. Check CUDA version: nvidia-smi
+# 2. Uncomment appropriate CUDA section
+# 3. Uncomment bitsandbytes
+# 4. Run: pip install -r requirements-gpu.txt
+
+# Linux with AMD GPU:
+# 1. Uncomment ROCm section
+# 2. Comment out bitsandbytes
+# 3. Run: pip install -r requirements-gpu.txt
+
+# CPU only (no GPU):
+# 1. Uncomment CPU section
+# 2. Comment out bitsandbytes
+# 3. Run: pip install -r requirements-gpu.txt
+
+# ============================================================================
+# Verification
+# ============================================================================
+
+# Test GPU availability:
+# python -c "import torch; print(f'CUDA: {torch.cuda.is_available()}'); print(f'MPS: {torch.backends.mps.is_available()}')"
+
+# Check GPU memory:
+# python -c "import torch; print(f'GPU Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.2f} GB')" # CUDA
+# python -c "import torch; t=torch.tensor([1.0]); t.to('mps'); print('MPS works!')" # MPS

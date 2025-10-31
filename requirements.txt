@@ -5,10 +5,20 @@
 # The system is intentionally self-contained to demonstrate
 # that structural reasoning doesn't require heavy ML frameworks
 
-# Optional: For future LLM integration
+# GPU acceleration (Phase 1)
+# Uncomment for GPU support:
+# torch>=2.0.0
+# numpy>=1.24.0
+
+# LLM integration (Phase 2)
 # openai>=1.0.0
 # transformers>=4.30.0
-# torch>=2.0.0
+# accelerate>=0.20.0
+# bitsandbytes>=0.39.0  # For quantization
+
+# Advanced features (Phase 3+)
+# torch-geometric>=2.3.0  # For graph neural networks
+# networkx>=3.0.0  # For graph algorithms
 
 # Development dependencies
 pytest>=7.0.0
