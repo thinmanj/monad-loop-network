@@ -9,6 +9,13 @@ from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 import json
 
+# Optional GPU acceleration
+try:
+    from .gpu_similarity import GPUStructuralSimilarity
+    GPU_AVAILABLE = True
+except ImportError:
+    GPU_AVAILABLE = False
+
 
 # ============================================================================
 # 1. MONADIC KNOWLEDGE UNITS (Leibniz)
@@ -151,20 +158,66 @@ class MetaRepresentation:
 class KnowledgeGraph:
     """
     Graph where nodes are MKUs (operational) not just embeddings (static)
+    
+    Now with GPU acceleration for pre-established harmony (Issue #1)
     """
-    def __init__(self):
+    def __init__(self, use_gpu: bool = True, device: str = 'auto'):
         self.nodes: Dict[str, MonadicKnowledgeUnit] = {}
         self.inference_rules: List['InferenceRule'] = []
+        
+        # GPU acceleration for similarity computation
+        self.use_gpu = use_gpu and GPU_AVAILABLE
+        if self.use_gpu:
+            self.gpu_similarity = GPUStructuralSimilarity(device=device)
+            print(f"KnowledgeGraph using GPU acceleration: {self.gpu_similarity.device}")
+        else:
+            self.gpu_similarity = None
+            if use_gpu and not GPU_AVAILABLE:
+                print("Warning: GPU requested but not available, using CPU")
     
     def add_concept(self, mku: MonadicKnowledgeUnit):
-        """Add concept and establish pre-established harmony"""
+        """Add concept and establish pre-established harmony (GPU-accelerated)"""
         self.nodes[mku.concept_id] = mku
-        mku.reflect_universe(self)
         
-        # Update other nodes' perspectives
-        for other_mku in self.nodes.values():
-            if other_mku.concept_id != mku.concept_id:
-                other_mku.reflect_universe(self)
+        if self.use_gpu and len(self.nodes) > 1:
+            # GPU-accelerated similarity computation
+            self._gpu_reflect_universe(mku)
+        else:
+            # Original CPU method
+            mku.reflect_universe(self)
+            
+            # Update other nodes' perspectives
+            for other_mku in self.nodes.values():
+                if other_mku.concept_id != mku.concept_id:
+                    other_mku.reflect_universe(self)
+    
+    def _gpu_reflect_universe(self, mku: MonadicKnowledgeUnit):
+        """GPU-accelerated pre-established harmony (Issue #1 optimization)"""
+        # Get all other concepts
+        other_concepts = [m for m in self.nodes.values() if m.concept_id != mku.concept_id]
+        if not other_concepts:
+            return
+        
+        # Batch similarity computation on GPU
+        other_structures = [m.deep_structure for m in other_concepts]
+        similarities = self.gpu_similarity.batch_similarity(
+            mku.deep_structure,
+            other_structures
+        )
+        
+        # Establish relations based on similarity
+        threshold = 0.3
+        for other_mku, similarity in zip(other_concepts, similarities):
+            if similarity > threshold:
+                relation_type = mku._infer_relation_type(other_mku)
+                if relation_type not in mku.relations:
+                    mku.relations[relation_type] = set()
+                mku.relations[relation_type].add(other_mku.concept_id)
+                
+                # Bidirectional relation
+                if relation_type not in other_mku.relations:
+                    other_mku.relations[relation_type] = set()
+                other_mku.relations[relation_type].add(mku.concept_id)
     
     def query(self, start_id: str, target_id: str) -> 'InferenceChain':
         """
@@ -430,9 +483,11 @@ class MetaKnowledgeGraph:
 class HybridIntelligenceSystem:
     """
     Combines statistical pattern recognition with symbolic reasoning
+    
+    Now with GPU acceleration by default (Issue #1)
     """
-    def __init__(self):
-        self.kg = KnowledgeGraph()
+    def __init__(self, use_gpu: bool = True, device: str = 'auto'):
+        self.kg = KnowledgeGraph(use_gpu=use_gpu, device=device)
         self.slp = StrangeLoopProcessor(self.kg)
         self.slp.create_strange_loop()
         
