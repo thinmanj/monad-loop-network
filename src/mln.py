@@ -358,6 +358,152 @@ class SubstitutionRule(InferenceRule):
         return None
 
 
+class ModusPonensRule(InferenceRule):
+    """
+    Modus Ponens: If A→B and A, then B
+    If we have an implication and its antecedent, infer the consequent
+    
+    Issue #4
+    """
+    def can_apply(self, premise: MonadicKnowledgeUnit) -> bool:
+        # Check if premise has 'implies' relation
+        return 'implies' in premise.relations or 'subtype' in premise.relations
+    
+    def apply(self, premise: MonadicKnowledgeUnit, kg: KnowledgeGraph) -> Optional[MonadicKnowledgeUnit]:
+        # Look for implies or subtype relations
+        for rel_type in ['implies', 'subtype']:
+            if rel_type not in premise.relations:
+                continue
+            
+            related_ids = premise.relations[rel_type]
+            if related_ids:
+                # Get the first consequent
+                consequent_id = list(related_ids)[0]
+                if consequent_id in kg.nodes:
+                    consequent = kg.nodes[consequent_id]
+                    # Create new inferred concept
+                    new_mku = MonadicKnowledgeUnit(
+                        concept_id=f"inferred_{consequent_id}_from_{premise.concept_id}",
+                        deep_structure={
+                            'predicate': 'modus_ponens',
+                            'arguments': [premise.concept_id, consequent_id],
+                            'properties': consequent.deep_structure.get('properties', {})
+                        }
+                    )
+                    return new_mku
+        return None
+
+
+class ContrapositionRule(InferenceRule):
+    """
+    Contraposition: If A→B, then ¬B→¬A
+    From an implication, derive its contrapositive
+    
+    Issue #4
+    """
+    def can_apply(self, premise: MonadicKnowledgeUnit) -> bool:
+        return 'implies' in premise.relations or 'subtype' in premise.relations
+    
+    def apply(self, premise: MonadicKnowledgeUnit, kg: KnowledgeGraph) -> Optional[MonadicKnowledgeUnit]:
+        for rel_type in ['implies', 'subtype']:
+            if rel_type not in premise.relations:
+                continue
+            
+            related_ids = premise.relations[rel_type]
+            if related_ids:
+                consequent_id = list(related_ids)[0]
+                # Create contrapositive: not B implies not A
+                new_mku = MonadicKnowledgeUnit(
+                    concept_id=f"not_{consequent_id}_implies_not_{premise.concept_id}",
+                    deep_structure={
+                        'predicate': 'contrapositive',
+                        'arguments': [f'¬{consequent_id}', f'¬{premise.concept_id}'],
+                        'properties': {'negation': True}
+                    }
+                )
+                return new_mku
+        return None
+
+
+class SymmetryRule(InferenceRule):
+    """
+    Symmetry: If A relates B (symmetric relation), then B relates A
+    For relations that are inherently symmetric (like 'sibling', 'equivalent')
+    
+    Issue #4
+    """
+    # Define which relations are symmetric
+    SYMMETRIC_RELATIONS = {'equivalence', 'sibling', 'peer', 'similar_to'}
+    
+    def can_apply(self, premise: MonadicKnowledgeUnit) -> bool:
+        # Check if premise has any symmetric relations
+        return any(rel in self.SYMMETRIC_RELATIONS for rel in premise.relations.keys())
+    
+    def apply(self, premise: MonadicKnowledgeUnit, kg: KnowledgeGraph) -> Optional[MonadicKnowledgeUnit]:
+        for rel_type in self.SYMMETRIC_RELATIONS:
+            if rel_type not in premise.relations:
+                continue
+            
+            related_ids = premise.relations[rel_type]
+            if related_ids:
+                # Get the first related concept
+                related_id = list(related_ids)[0]
+                if related_id in kg.nodes:
+                    related = kg.nodes[related_id]
+                    
+                    # Check if reverse relation already exists
+                    if rel_type in related.relations and premise.concept_id in related.relations[rel_type]:
+                        continue  # Already symmetric
+                    
+                    # Create symmetric inference
+                    new_mku = MonadicKnowledgeUnit(
+                        concept_id=f"symmetric_{related_id}_{premise.concept_id}",
+                        deep_structure={
+                            'predicate': 'symmetric_relation',
+                            'arguments': [related_id, premise.concept_id],
+                            'properties': {'relation_type': rel_type}
+                        }
+                    )
+                    return new_mku
+        return None
+
+
+class CompositionRule(InferenceRule):
+    """
+    Composition: Combine multiple inference rules
+    If we can apply two rules in sequence, compose them
+    
+    Issue #4
+    """
+    def __init__(self, rule1: InferenceRule, rule2: InferenceRule):
+        self.rule1 = rule1
+        self.rule2 = rule2
+    
+    def can_apply(self, premise: MonadicKnowledgeUnit) -> bool:
+        # Can apply if first rule is applicable
+        return self.rule1.can_apply(premise)
+    
+    def apply(self, premise: MonadicKnowledgeUnit, kg: KnowledgeGraph) -> Optional[MonadicKnowledgeUnit]:
+        # Apply first rule
+        intermediate = self.rule1.apply(premise, kg)
+        if not intermediate:
+            return None
+        
+        # Try to apply second rule to intermediate result
+        if self.rule2.can_apply(intermediate):
+            final = self.rule2.apply(intermediate, kg)
+            if final:
+                # Mark as composed inference
+                final.deep_structure['composed'] = True
+                final.deep_structure['composition'] = [
+                    self.rule1.__class__.__name__,
+                    self.rule2.__class__.__name__
+                ]
+                return final
+        
+        return intermediate  # Return intermediate if second rule doesn't apply
+
+
 # ============================================================================
 # 4. STRANGE LOOP PROCESSOR (GEB Self-Reference)
 # ============================================================================
@@ -491,9 +637,13 @@ class HybridIntelligenceSystem:
         self.slp = StrangeLoopProcessor(self.kg)
         self.slp.create_strange_loop()
         
-        # Add some inference rules
+        # Add inference rules (Issue #4 complete)
         self.kg.add_inference_rule(TransitivityRule())
         self.kg.add_inference_rule(SubstitutionRule())
+        self.kg.add_inference_rule(ModusPonensRule())
+        self.kg.add_inference_rule(ContrapositionRule())
+        self.kg.add_inference_rule(SymmetryRule())
+        # Note: CompositionRule requires two rules, can be added as needed
     
     def add_knowledge(self, concept_id: str, deep_structure: Dict):
         """Add new knowledge to the system"""
