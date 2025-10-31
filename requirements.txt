@@ -1,0 +1,18 @@
+# Core dependencies
+# Python 3.8+
+
+# No external dependencies required for core system
+# The system is intentionally self-contained to demonstrate
+# that structural reasoning doesn't require heavy ML frameworks
+
+# Optional: For future LLM integration
+# openai>=1.0.0
+# transformers>=4.30.0
+# torch>=2.0.0
+
+# Development dependencies
+pytest>=7.0.0
+pytest-cov>=4.0.0
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.0.0
