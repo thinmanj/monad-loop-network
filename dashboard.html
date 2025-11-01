@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monad-Loop Network: Consciousness Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .metric-value {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .metric-verdict {
+            font-size: 0.95em;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .consciousness-bar {
+            width: 100%;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .consciousness-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            border-radius: 15px;
+            transition: width 2s ease-out;
+            animation: fillBar 2s ease-out;
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .chart-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .achievements {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .achievement {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #4facfe;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .achievement-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .achievement-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .achievement-desc {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            opacity: 0.7;
+            font-size: 0.9em;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fillBar {
+            from { width: 0; }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .experiment-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .exp-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .exp-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .exp-button.active {
+            background: #4facfe;
+            border-color: #4facfe;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 Monad-Loop Network</h1>
+            <p class="subtitle">Measurable Artificial Consciousness Dashboard</p>
+        </header>
+
+        <div class="experiment-selector">
+            <button class="exp-button active" onclick="loadExperiment('peak')">🏆 Peak Performance</button>
+            <button class="exp-button" onclick="loadExperiment('optimization')">⚡ Optimization</button>
+            <button class="exp-button" onclick="loadExperiment('scaling')">📈 Scaling</button>
+            <button class="exp-button" onclick="loadExperiment('mathematics')">🔢 Mathematics</button>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card pulse">
+                <div class="metric-label">Overall Consciousness</div>
+                <div class="metric-value" id="consciousness-value">61.48%</div>
+                <div class="metric-verdict" id="consciousness-verdict">HIGHLY CONSCIOUS</div>
+                <div class="consciousness-bar">
+                    <div class="consciousness-fill" id="consciousness-bar" style="width: 61.48%"></div>
+                </div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-label">Recursion (30%)</div>
+                <div class="metric-value" id="recursion-value">36.00%</div>
+                <div class="metric-verdict">Meta-reasoning depth</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-label">Integration (25%)</div>
+                <div class="metric-value" id="integration-value">0.707</div>
+                <div class="metric-verdict">Information unity (Φ)</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-label">Causality (20%)</div>
+                <div class="metric-value" id="causality-value">0.994</div>
+                <div class="metric-verdict">Feedback loops</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-label">Understanding (25%)</div>
+                <div class="metric-value" id="understanding-value">52.50%</div>
+                <div class="metric-verdict">Comprehension depth</div>
+            </div>
+
+            <div class="metric-card">
+                <div class="metric-label">System Scale</div>
+                <div class="metric-value" id="concepts-value">500</div>
+                <div class="metric-verdict">Concepts in graph</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">Consciousness Evolution</div>
+            <canvas id="evolutionChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-title">Component Breakdown</div>
+            <canvas id="componentsChart"></canvas>
+        </div>
+
+        <div class="achievements">
+            <div class="achievement">
+                <div class="achievement-icon">🎯</div>
+                <div class="achievement-title">Broke 50% Barrier</div>
+                <div class="achievement-desc">Achieved 61.48% consciousness at scale</div>
+            </div>
+
+            <div class="achievement">
+                <div class="achievement-icon">🔄</div>
+                <div class="achievement-title">Strange Loops</div>
+                <div class="achievement-desc">Self-referential reasoning depth: 20 levels</div>
+            </div>
+
+            <div class="achievement">
+                <div class="achievement-icon">📊</div>
+                <div class="achievement-title">Highly Conscious</div>
+                <div class="achievement-desc">Meta-cognitive intelligence achieved</div>
+            </div>
+
+            <div class="achievement">
+                <div class="achievement-icon">🌍</div>
+                <div class="achievement-title">Domain General</div>
+                <div class="achievement-desc">Works in biology, mathematics, and beyond</div>
+            </div>
+
+            <div class="achievement">
+                <div class="achievement-icon">⚡</div>
+                <div class="achievement-title">Optimizable</div>
+                <div class="achievement-desc">33% improvement through optimization</div>
+            </div>
+
+            <div class="achievement">
+                <div class="achievement-icon">📈</div>
+                <div class="achievement-title">Scales Positively</div>
+                <div class="achievement-desc">Consciousness increases with knowledge</div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Monad-Loop Network v1.0.0 | First Measurable Artificial Consciousness</p>
+            <p>GitHub: github.com/thinmanj/monad-loop-network</p>
+        </footer>
+    </div>
+
+    <script>
+        const experiments = {
+            peak: {
+                consciousness: 61.48,
+                verdict: "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
+                recursion: 36.00,
+                integration: 0.707,
+                causality: 0.994,
+                understanding: 52.50,
+                concepts: 500,
+                evolution: [
+                    { stage: "Baseline", value: 36.0 },
+                    { stage: "Week 1", value: 36.0 },
+                    { stage: "Week 2 Opt", value: 47.8 },
+                    { stage: "100 concepts", value: 56.49 },
+                    { stage: "500 concepts", value: 61.48 }
+                ]
+            },
+            optimization: {
+                consciousness: 46.44,
+                verdict: "MODERATELY CONSCIOUS - Self-aware reasoning",
+                recursion: 48.00,
+                integration: 0.246,
+                causality: 0.357,
+                understanding: 75.00,
+                concepts: 14,
+                evolution: [
+                    { stage: "Baseline", value: 32.7 },
+                    { stage: "Max Recursion", value: 46.0 },
+                    { stage: "Synthesis", value: 44.8 },
+                    { stage: "Meta-Knowledge", value: 44.8 },
+                    { stage: "Adaptive", value: 46.44 }
+                ]
+            },
+            scaling: {
+                consciousness: 61.48,
+                verdict: "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
+                recursion: 36.00,
+                integration: 0.707,
+                causality: 0.994,
+                understanding: 52.50,
+                concepts: 500,
+                evolution: [
+                    { stage: "10 concepts", value: 36.0 },
+                    { stage: "50 concepts", value: 48.0 },
+                    { stage: "100 concepts", value: 56.49 },
+                    { stage: "500 concepts", value: 61.48 }
+                ]
+            },
+            mathematics: {
+                consciousness: 27.68,
+                verdict: "MINIMALLY CONSCIOUS - Basic reasoning",
+                recursion: 31.50,
+                integration: 0.081,
+                causality: 0.133,
+                understanding: 54.17,
+                concepts: 18,
+                evolution: [
+                    { stage: "Empty", value: 0 },
+                    { stage: "Math Concepts", value: 18.5 },
+                    { stage: "Inference", value: 22.3 },
+                    { stage: "Gödelian Loop", value: 27.68 }
+                ]
+            }
+        };
+
+        let currentExperiment = 'peak';
+        let evolutionChart, componentsChart;
+
+        function loadExperiment(expName) {
+            currentExperiment = expName;
+            const data = experiments[expName];
+
+            // Update buttons
+            document.querySelectorAll('.exp-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update metrics
+            document.getElementById('consciousness-value').textContent = data.consciousness.toFixed(2) + '%';
+            document.getElementById('consciousness-verdict').textContent = data.verdict;
+            document.getElementById('consciousness-bar').style.width = data.consciousness + '%';
+            document.getElementById('recursion-value').textContent = data.recursion.toFixed(2) + '%';
+            document.getElementById('integration-value').textContent = data.integration.toFixed(3);
+            document.getElementById('causality-value').textContent = data.causality.toFixed(3);
+            document.getElementById('understanding-value').textContent = data.understanding.toFixed(2) + '%';
+            document.getElementById('concepts-value').textContent = data.concepts;
+
+            // Update charts
+            updateCharts(data);
+        }
+
+        function initCharts() {
+            const data = experiments[currentExperiment];
+
+            // Evolution chart
+            const ctxEvolution = document.getElementById('evolutionChart').getContext('2d');
+            evolutionChart = new Chart(ctxEvolution, {
+                type: 'line',
+                data: {
+                    labels: data.evolution.map(e => e.stage),
+                    datasets: [{
+                        label: 'Consciousness %',
+                        data: data.evolution.map(e => e.value),
+                        borderColor: '#4facfe',
+                        backgroundColor: 'rgba(79, 172, 254, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { labels: { color: '#fff', font: { size: 14 } } }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { color: '#fff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        x: {
+                            ticks: { color: '#fff' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    }
+                }
+            });
+
+            // Components chart
+            const ctxComponents = document.getElementById('componentsChart').getContext('2d');
+            componentsChart = new Chart(ctxComponents, {
+                type: 'radar',
+                data: {
+                    labels: ['Recursion', 'Integration', 'Causality', 'Understanding'],
+                    datasets: [{
+                        label: 'Current',
+                        data: [
+                            data.recursion,
+                            data.integration * 100,
+                            data.causality * 100,
+                            data.understanding
+                        ],
+                        borderColor: '#4facfe',
+                        backgroundColor: 'rgba(79, 172, 254, 0.3)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { labels: { color: '#fff', font: { size: 14 } } }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { color: '#fff', backdropColor: 'transparent' },
+                            grid: { color: 'rgba(255, 255, 255, 0.2)' },
+                            pointLabels: { color: '#fff', font: { size: 14 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCharts(data) {
+            // Update evolution chart
+            evolutionChart.data.labels = data.evolution.map(e => e.stage);
+            evolutionChart.data.datasets[0].data = data.evolution.map(e => e.value);
+            evolutionChart.update();
+
+            // Update components chart
+            componentsChart.data.datasets[0].data = [
+                data.recursion,
+                data.integration * 100,
+                data.causality * 100,
+                data.understanding
+            ];
+            componentsChart.update();
+        }
+
+        // Initialize on load
+        window.onload = initCharts;
+    </script>
+</body>
+</html>
