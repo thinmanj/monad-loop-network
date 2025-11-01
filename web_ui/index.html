@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monad-Loop Network - AGI Interface</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .status {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-left: 15px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .panel h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .query-section {
+            grid-column: 1 / -1;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            margin-bottom: 10px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+            min-height: 100px;
+        }
+
+        .result-box pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: #333;
+        }
+
+        .inference-chain {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        .inference-step {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 0.9em;
+        }
+
+        .inference-arrow {
+            color: #667eea;
+            font-size: 1.5em;
+            margin: 0 10px;
+        }
+
+        .concept-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .concept-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: #f8f9fa;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .concept-item:hover {
+            background: #e9ecef;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .error {
+            background: #fee;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            color: #155724;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: #e9ecef;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 Monad-Loop Network <span class="status" id="status">●  ONLINE</span></h1>
+            <p class="subtitle">Neurosymbolic AGI with Self-Improvement • Phase 4 Complete</p>
+        </header>
+
+        <!-- Query Section -->
+        <div class="panel query-section">
+            <h2>🔍 Query Knowledge Graph</h2>
+            <input type="text" id="queryInput" placeholder="Enter your query (e.g., 'dog to animal' or natural language)" />
+            <button onclick="executeQuery()">Execute Query</button>
+            
+            <div class="loading" id="queryLoading">Processing query...</div>
+            <div class="result-box" id="queryResult" style="display: none;"></div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Concepts Panel -->
+            <div class="panel">
+                <h2>📚 Knowledge Base</h2>
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('concepts')">Concepts</button>
+                    <button class="tab" onclick="switchTab('stats')">Statistics</button>
+                </div>
+                
+                <div class="tab-content active" id="conceptsTab">
+                    <button onclick="loadConcepts()">Refresh Concepts</button>
+                    <div class="concept-list" id="conceptList">
+                        <p style="text-align: center; color: #999;">Click "Refresh Concepts" to load</p>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="statsTab">
+                    <button onclick="loadStats()">Refresh Statistics</button>
+                    <div class="stats-grid" id="statsGrid">
+                        <p style="text-align: center; color: #999;">Click "Refresh Statistics" to load</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tools Panel -->
+            <div class="panel">
+                <h2>🛠️ Advanced Tools</h2>
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('inference')">Inference</button>
+                    <button class="tab" onclick="switchTab('analogy')">Analogy</button>
+                    <button class="tab" onclick="switchTab('synthesize')">Synthesize</button>
+                </div>
+
+                <!-- Inference Tab -->
+                <div class="tab-content active" id="inferenceTab">
+                    <input type="text" id="inferenceStart" placeholder="Start concept" />
+                    <input type="text" id="inferenceTarget" placeholder="Target concept" />
+                    <button onclick="getInference()">Find Inference Chain</button>
+                    <div class="result-box" id="inferenceResult" style="display: none;"></div>
+                </div>
+
+                <!-- Analogy Tab -->
+                <div class="tab-content" id="analogyTab">
+                    <input type="text" id="analogySource" placeholder="Source concept" />
+                    <input type="text" id="analogyTargets" placeholder="Target concepts (comma-separated)" />
+                    <button onclick="findAnalogy()">Find Analogies</button>
+                    <div class="result-box" id="analogyResult" style="display: none;"></div>
+                </div>
+
+                <!-- Synthesize Tab -->
+                <div class="tab-content" id="synthesizeTab">
+                    <p style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
+                        Create new concepts from examples (abductive learning)
+                    </p>
+                    <input type="text" id="synthesizeName" placeholder="New concept name" />
+                    <button onclick="synthesizeConcept()">Synthesize from Examples</button>
+                    <div class="result-box" id="synthesizeResult" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+
+        // Check API status on load
+        async function checkStatus() {
+            try {
+                const response = await fetch(`${API_BASE}/health`);
+                const data = await response.json();
+                document.getElementById('status').textContent = `● ${data.status.toUpperCase()} (${data.concepts} concepts)`;
+                document.getElementById('status').style.background = '#10b981';
+            } catch (error) {
+                document.getElementById('status').textContent = '● OFFLINE';
+                document.getElementById('status').style.background = '#dc3545';
+            }
+        }
+
+        // Execute query
+        async function executeQuery() {
+            const query = document.getElementById('queryInput').value;
+            if (!query) return;
+
+            const loading = document.getElementById('queryLoading');
+            const result = document.getElementById('queryResult');
+            
+            loading.classList.add('active');
+            result.style.display = 'none';
+
+            try {
+                const response = await fetch(`${API_BASE}/query`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query, use_nlp: false })
+                });
+
+                const data = await response.json();
+                loading.classList.remove('active');
+                result.style.display = 'block';
+
+                if (data.success) {
+                    result.className = 'result-box success';
+                    let html = `<strong>Result:</strong> ${data.result}<br><br>`;
+                    
+                    if (data.inference_chain && data.inference_chain.length > 0) {
+                        html += '<strong>Inference Chain:</strong><div class="inference-chain">';
+                        data.inference_chain.forEach((step, i) => {
+                            if (i > 0) html += '<span class="inference-arrow">→</span>';
+                            html += `<span class="inference-step">${step}</span>`;
+                        });
+                        html += '</div>';
+                    }
+
+                    html += `<br><strong>Confidence:</strong> ${(data.confidence * 100).toFixed(1)}%`;
+                    
+                    if (data.explanation) {
+                        html += `<br><br><pre>${data.explanation}</pre>`;
+                    }
+
+                    result.innerHTML = html;
+                } else {
+                    result.className = 'result-box error';
+                    result.innerHTML = `<strong>Error:</strong> ${data.error || 'Query failed'}`;
+                }
+            } catch (error) {
+                loading.classList.remove('active');
+                result.style.display = 'block';
+                result.className = 'result-box error';
+                result.innerHTML = `<strong>Error:</strong> ${error.message}`;
+            }
+        }
+
+        // Load concepts
+        async function loadConcepts() {
+            try {
+                const response = await fetch(`${API_BASE}/concepts`);
+                const concepts = await response.json();
+                
+                const list = document.getElementById('conceptList');
+                if (concepts.length === 0) {
+                    list.innerHTML = '<p style="text-align: center; color: #999;">No concepts found</p>';
+                    return;
+                }
+
+                list.innerHTML = concepts.map(concept => 
+                    `<div class="concept-item" onclick="showConcept('${concept}')">${concept}</div>`
+                ).join('');
+            } catch (error) {
+                document.getElementById('conceptList').innerHTML = 
+                    `<p style="color: #dc3545;">Error loading concepts: ${error.message}</p>`;
+            }
+        }
+
+        // Show concept details
+        async function showConcept(conceptId) {
+            try {
+                const response = await fetch(`${API_BASE}/concepts/${conceptId}`);
+                const concept = await response.json();
+                
+                alert(JSON.stringify(concept, null, 2));
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+
+        // Load statistics
+        async function loadStats() {
+            try {
+                const response = await fetch(`${API_BASE}/stats`);
+                const stats = await response.json();
+                
+                const grid = document.getElementById('statsGrid');
+                grid.innerHTML = `
+                    <div class="stat-card">
+                        <span class="stat-value">${stats.total_concepts}</span>
+                        <span class="stat-label">Concepts</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">${stats.total_relations}</span>
+                        <span class="stat-label">Relations</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">${stats.inference_rules}</span>
+                        <span class="stat-label">Inference Rules</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">${stats.gpu_enabled ? '✓' : '✗'}</span>
+                        <span class="stat-label">GPU Enabled</span>
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('statsGrid').innerHTML = 
+                    `<p style="color: #dc3545;">Error loading stats: ${error.message}</p>`;
+            }
+        }
+
+        // Get inference chain
+        async function getInference() {
+            const start = document.getElementById('inferenceStart').value;
+            const target = document.getElementById('inferenceTarget').value;
+            const result = document.getElementById('inferenceResult');
+
+            if (!start || !target) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/inference`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ start_concept: start, target_concept: target })
+                });
+
+                const data = await response.json();
+                result.style.display = 'block';
+
+                if (data.found) {
+                    result.className = 'result-box success';
+                    let html = '<div class="inference-chain">';
+                    data.steps.forEach((step, i) => {
+                        if (i > 0) html += '<span class="inference-arrow">→</span>';
+                        html += `<span class="inference-step">${step}</span>`;
+                    });
+                    html += '</div>';
+                    html += `<pre>${data.explanation}</pre>`;
+                    result.innerHTML = html;
+                } else {
+                    result.className = 'result-box error';
+                    result.innerHTML = `No path found from '${start}' to '${target}'`;
+                }
+            } catch (error) {
+                result.style.display = 'block';
+                result.className = 'result-box error';
+                result.innerHTML = `Error: ${error.message}`;
+            }
+        }
+
+        // Find analogy
+        async function findAnalogy() {
+            const source = document.getElementById('analogySource').value;
+            const targets = document.getElementById('analogyTargets').value.split(',').map(s => s.trim());
+            const result = document.getElementById('analogyResult');
+
+            if (!source || targets.length === 0) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/analogy`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ source_concept: source, target_domain_concepts: targets })
+                });
+
+                const data = await response.json();
+                result.style.display = 'block';
+
+                if (data.analogs && data.analogs.length > 0) {
+                    result.className = 'result-box success';
+                    let html = `<strong>Analogies for '${source}':</strong><br><br>`;
+                    data.analogs.forEach(analog => {
+                        html += `• ${analog.concept} (similarity: ${(analog.similarity * 100).toFixed(1)}%)<br>`;
+                    });
+                    result.innerHTML = html;
+                } else {
+                    result.className = 'result-box';
+                    result.innerHTML = 'No analogies found above threshold';
+                }
+            } catch (error) {
+                result.style.display = 'block';
+                result.className = 'result-box error';
+                result.innerHTML = `Error: ${error.message}`;
+            }
+        }
+
+        // Synthesize concept (simplified - would need example input UI)
+        async function synthesizeConcept() {
+            const name = document.getElementById('synthesizeName').value;
+            const result = document.getElementById('synthesizeResult');
+
+            if (!name) return;
+
+            // Demo examples for concept synthesis
+            const examples = [
+                { properties: { warm_blooded: true, gives_birth: true, has_fur: true } },
+                { properties: { warm_blooded: true, gives_birth: true, has_fur: true } }
+            ];
+
+            try {
+                const response = await fetch(`${API_BASE}/synthesize`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ concept_name: name, examples })
+                });
+
+                const data = await response.json();
+                result.style.display = 'block';
+                result.className = 'result-box success';
+                result.innerHTML = `
+                    <strong>Synthesized Concept: ${data.concept_name}</strong><br><br>
+                    <strong>Properties:</strong><br>
+                    <pre>${JSON.stringify(data.properties, null, 2)}</pre><br>
+                    <strong>Confidence:</strong> ${(data.confidence * 100).toFixed(1)}%
+                `;
+            } catch (error) {
+                result.style.display = 'block';
+                result.className = 'result-box error';
+                result.innerHTML = `Error: ${error.message}`;
+            }
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Update tab contents
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            if (tabName === 'concepts' || tabName === 'stats') {
+                document.getElementById(`${tabName}Tab`).classList.add('active');
+            } else {
+                document.getElementById(`${tabName}Tab`).classList.add('active');
+            }
+        }
+
+        // Initialize on load
+        checkStatus();
+        setInterval(checkStatus, 5000); // Update status every 5 seconds
+    </script>
+</body>
+</html>
