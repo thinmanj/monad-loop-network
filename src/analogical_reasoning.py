@@ -498,11 +498,189 @@ class IsomorphismMatcher:
         return 0.6 * prop_sim + 0.4 * neighbor_score
 
 
+@dataclass
+class AnalogyTransfer:
+    """
+    Transfer knowledge from source to target using analogy (Issue #17)
+    """
+    source_concept: str
+    target_concept: str
+    mapping: NodeMapping
+    transferred_relations: List[Tuple[str, str, str]]  # Relations transferred to target
+    confidence: float = 0.0  # Confidence in the transfer
+
+
+class AnalogyEngine:
+    """
+    Transfer knowledge between analogous structures (Issue #17)
+    """
+    
+    def __init__(self, knowledge_graph: Dict):
+        """
+        Args:
+            knowledge_graph: Dict of concept_id -> MKU
+        """
+        self.kg = knowledge_graph
+        self.extractor = StructureExtractor(max_depth=2)
+        self.matcher = IsomorphismMatcher(max_attempts=1000)
+    
+    def transfer_by_analogy(
+        self,
+        source_concept: str,
+        target_concept: str,
+        min_similarity: float = 0.5
+    ) -> Optional[AnalogyTransfer]:
+        """
+        Transfer knowledge from source to target using structural analogy
+        
+        Args:
+            source_concept: Source concept ID
+            target_concept: Target concept ID
+            min_similarity: Minimum structural similarity required
+            
+        Returns:
+            AnalogyTransfer if successful, None otherwise
+        """
+        # Extract structures
+        source_structure = self.extractor.extract_structure(source_concept, self.kg)
+        target_structure = self.extractor.extract_structure(target_concept, self.kg)
+        
+        # Check similarity
+        similarity = source_structure.similarity(target_structure)
+        if similarity < min_similarity:
+            return None
+        
+        # Find mapping
+        mapping = self.matcher.find_best_mapping(
+            source_structure,
+            target_structure,
+            require_complete=False
+        )
+        
+        if not mapping or mapping.score < 0.3:
+            return None
+        
+        # Transfer relations
+        transferred = self._transfer_relations(
+            source_structure,
+            target_structure,
+            mapping
+        )
+        
+        # Compute confidence
+        confidence = (similarity + mapping.score) / 2.0
+        
+        return AnalogyTransfer(
+            source_concept=source_concept,
+            target_concept=target_concept,
+            mapping=mapping,
+            transferred_relations=transferred,
+            confidence=confidence
+        )
+    
+    def _transfer_relations(
+        self,
+        source_structure: 'AbstractStructure',
+        target_structure: 'AbstractStructure',
+        mapping: NodeMapping
+    ) -> List[Tuple[str, str, str]]:
+        """
+        Identify relations that can be transferred from source to target
+        
+        Returns:
+            List of (source_node, relation, target_node) that exist in source
+            but not in target (after mapping)
+        """
+        transferred = []
+        
+        # Map source edges to target domain
+        for s_src, rel, s_tgt in source_structure.edges:
+            if s_src in mapping.source_to_target and s_tgt in mapping.source_to_target:
+                t_src = mapping.source_to_target[s_src]
+                t_tgt = mapping.source_to_target[s_tgt]
+                
+                # Check if this relation exists in target
+                if (t_src, rel, t_tgt) not in target_structure.edges:
+                    transferred.append((t_src, rel, t_tgt))
+        
+        return transferred
+    
+    def apply_transfer(
+        self,
+        transfer: AnalogyTransfer,
+        threshold: float = 0.6
+    ) -> bool:
+        """
+        Apply a knowledge transfer to the knowledge graph
+        
+        Args:
+            transfer: AnalogyTransfer to apply
+            threshold: Minimum confidence required to apply
+            
+        Returns:
+            True if applied, False otherwise
+        """
+        if transfer.confidence < threshold:
+            return False
+        
+        # In a real implementation, this would modify the knowledge graph
+        # For now, we just return True to indicate it would be applied
+        return True
+    
+    def find_analogies(
+        self,
+        concept: str,
+        min_similarity: float = 0.5,
+        top_k: int = 5
+    ) -> List[Tuple[str, float, Optional[NodeMapping]]]:
+        """
+        Find analogous concepts in the knowledge graph
+        
+        Args:
+            concept: Query concept
+            min_similarity: Minimum similarity threshold
+            top_k: Number of results to return
+            
+        Returns:
+            List of (concept_id, similarity, mapping) sorted by similarity
+        """
+        if concept not in self.kg:
+            return []
+        
+        # Extract query structure
+        query_structure = self.extractor.extract_structure(concept, self.kg)
+        
+        # Build structure library
+        all_concepts = [cid for cid in self.kg.keys() if cid != concept]
+        structure_library = self.extractor.extract_multiple(all_concepts, self.kg)
+        
+        # Find similar structures
+        matches = self.extractor.find_similar_structures(
+            query_structure,
+            structure_library,
+            min_similarity=min_similarity,
+            top_k=top_k
+        )
+        
+        # Find mappings for each match
+        results = []
+        for concept_id, similarity in matches:
+            target_structure = structure_library[concept_id]
+            mapping = self.matcher.find_best_mapping(
+                query_structure,
+                target_structure,
+                require_complete=False
+            )
+            results.append((concept_id, similarity, mapping))
+        
+        return results
+
+
 def demo_structure_extraction():
-    """Demonstrate structure extraction and isomorphism matching"""
+    """Demonstrate complete analogical reasoning pipeline"""
     print("=" * 70)
-    print("ANALOGICAL REASONING DEMO - Issues #15-16")
-    print("Hofstadter's Structure Extraction + Isomorphism Matching")
+    print("ANALOGICAL REASONING DEMO - Issues #15-17")
+    print("Structure Extraction + Isomorphism + Analogy Transfer")
     print("=" * 70)
     print()
     
@@ -637,11 +815,56 @@ def demo_structure_extraction():
     print("\n" + "=" * 70)
     print("✓ Isomorphism matching complete!")
     print("=" * 70)
+    
+    # Issue #17: Analogy Transfer
+    print("\n" + "=" * 70)
+    print("6. Transferring knowledge by analogy (Issue #17)")
+    print("-" * 70)
+    
+    engine = AnalogyEngine(kg)
+    transfer = engine.transfer_by_analogy('sun', 'nucleus', min_similarity=0.5)
+    
+    if transfer:
+        print(f"\nAnalogy transfer successful!")
+        print(f"  Source: {transfer.source_concept}")
+        print(f"  Target: {transfer.target_concept}")
+        print(f"  Confidence: {transfer.confidence:.2f}")
+        print(f"\nNode mapping:")
+        for s, t in sorted(transfer.mapping.source_to_target.items()):
+            print(f"  {s} → {t}")
+        
+        if transfer.transferred_relations:
+            print(f"\nRelations that could be transferred:")
+            for src, rel, tgt in transfer.transferred_relations:
+                print(f"  {src} --[{rel}]--> {tgt}")
+        else:
+            print(f"\nNo new relations to transfer (structures already aligned)")
+        
+        # Check if transfer would be applied
+        would_apply = engine.apply_transfer(transfer, threshold=0.6)
+        print(f"\nWould apply transfer (threshold=0.6)? {would_apply}")
+    else:
+        print("\nNo valid analogy transfer found.")
+    
+    # Find all analogies
+    print("\n7. Finding all analogies for 'sun'")
+    print("-" * 70)
+    
+    analogies = engine.find_analogies('sun', min_similarity=0.5, top_k=3)
+    print(f"\nFound {len(analogies)} analogies:\n")
+    for concept_id, similarity, mapping in analogies:
+        map_score = mapping.score if mapping else 0.0
+        print(f"  {concept_id}: similarity={similarity:.2f}, mapping_score={map_score:.2f}")
+    
+    print("\n" + "=" * 70)
+    print("✓ Analogy transfer complete!")
+    print("=" * 70)
     print()
     print("Key Insight:")
-    print("  The solar system (sun + planets) has similar STRUCTURE")
-    print("  to an atom (nucleus + electrons), and we can now map")
-    print("  the specific correspondences between them!")
+    print("  We can now transfer knowledge from the solar system to atoms")
+    print("  (and vice versa) based on their structural similarity!")
+    print("  Example: If we learn something new about planetary orbits,")
+    print("  we can hypothesize it might apply to electron orbits too.")
     print("=" * 70)
 
 
