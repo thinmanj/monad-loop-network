@@ -1,9 +1,8 @@
 # Core dependencies
 # Python 3.8+
 
-# No external dependencies required for core system
-# The system is intentionally self-contained to demonstrate
-# that structural reasoning doesn't require heavy ML frameworks
+# Minimal dependencies for core system
+requests>=2.28.0  # For ontology API calls (Issue #13)
 
 # GPU acceleration (Phase 1)
 # Uncomment for GPU support:

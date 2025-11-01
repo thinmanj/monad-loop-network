@@ -20,6 +20,7 @@ try:
         EntityExtraction,
         create_mock_interface
     )
+    from .ontology_loader import OntologyIntegrator
 except ImportError:
     # Standalone execution
     sys.path.insert(0, os.path.dirname(__file__))
@@ -30,6 +31,7 @@ except ImportError:
         EntityExtraction,
         create_mock_interface
     )
+    from ontology_loader import OntologyIntegrator
 
 
 class NeurosymbolicSystem:
@@ -68,9 +70,13 @@ class NeurosymbolicSystem:
         # Natural language interface
         self.nlp = nlp_interface if nlp_interface else create_mock_interface()
         
+        # Ontology loader (Issue #13)
+        self.ontology = OntologyIntegrator()
+        
         print(f"NeurosymbolicSystem initialized")
         print(f"  - Symbolic reasoning: GPU={use_gpu}")
         print(f"  - NLP interface: {type(self.nlp.llm).__name__}")
+        print(f"  - Ontology sources: ConceptNet, DBpedia, Wikidata")
     
     def add_knowledge_from_text(self, text: str) -> List[str]:
         """
@@ -242,6 +248,56 @@ class NeurosymbolicSystem:
         """
         self.symbolic_system.add_knowledge(concept_id, deep_structure)
     
+    def load_from_ontology(
+        self,
+        concept: str,
+        sources: List[str] = ['conceptnet'],
+        limit: int = 50
+    ) -> int:
+        """
+        Load a concept and related concepts from ontologies (Issue #13)
+        
+        Args:
+            concept: Concept to load
+            sources: Ontology sources ('conceptnet', 'dbpedia', 'wikidata')
+            limit: Maximum facts per source
+            
+        Returns:
+            Number of concepts added
+        """
+        print(f"\nLoading '{concept}' from ontologies...")
+        
+        # Load triples from ontology
+        triples = self.ontology.load_concept(concept, sources, limit)
+        
+        # Convert to MKU format
+        mku_data = self.ontology.triples_to_mku_data(triples)
+        
+        # Add to knowledge graph
+        count = 0
+        for concept_id, deep_structure in mku_data.items():
+            # Convert relation lists back to sets
+            relations = {}
+            for rel_type, targets in deep_structure.get('relations', {}).items():
+                relations[rel_type] = set(targets) if isinstance(targets, list) else targets
+            
+            # Add concept
+            self.symbolic_system.add_knowledge(concept_id, {
+                'predicate': deep_structure.get('predicate', 'concept'),
+                'properties': deep_structure.get('properties', {}),
+                'source': deep_structure.get('source', 'ontology')
+            })
+            
+            # Add relations
+            if concept_id in self.symbolic_system.kg.nodes:
+                node = self.symbolic_system.kg.nodes[concept_id]
+                node.relations.update(relations)
+            
+            count += 1
+        
+        print(f"✓ Added {count} concepts from ontologies")
+        return count
+    
     def explain_reasoning(self) -> str:
         """Get explanation of system's reasoning"""
         return self.symbolic_system.explain_reasoning()
@@ -268,7 +324,15 @@ def demo_neurosymbolic():
     system = NeurosymbolicSystem(use_gpu=False)
     
     print("\n" + "=" * 70)
-    print("1. Adding Knowledge from Text")
+    print("1. Loading from Ontologies (Issue #13)")
+    print("=" * 70)
+    
+    # Load from ConceptNet
+    count = system.load_from_ontology('dog', sources=['conceptnet'], limit=20)
+    print(f"\nLoaded {count} concepts about 'dog'")
+    
+    print("\n" + "=" * 70)
+    print("2. Adding Knowledge from Text")
     print("=" * 70)
     
     # Add knowledge from natural language
@@ -300,7 +364,7 @@ def demo_neurosymbolic():
     })
     
     print("\n" + "=" * 70)
-    print("2. Natural Language Query")
+    print("3. Natural Language Query")
     print("=" * 70)
     
     # Query in natural language
@@ -312,7 +376,7 @@ def demo_neurosymbolic():
     print(f"Valid reasoning: {result['is_valid']}")
     
     print("\n" + "=" * 70)
-    print("3. System Statistics")
+    print("4. System Statistics")
     print("=" * 70)
     stats = system.get_statistics()
     for key, value in stats.items():
