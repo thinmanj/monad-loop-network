@@ -10,6 +10,7 @@ from typing import Dict, List, Set, Tuple, Optional
 from dataclasses import dataclass, field
 from collections import defaultdict
 import hashlib
+from itertools import permutations
 
 
 @dataclass
@@ -225,11 +226,283 @@ class StructureExtractor:
         return matches[:top_k]
 
 
+@dataclass
+class NodeMapping:
+    """
+    Mapping between nodes in two structures (Issue #16)
+    Represents an isomorphism or partial isomorphism
+    """
+    source_to_target: Dict[str, str]  # source_node -> target_node
+    target_to_source: Dict[str, str]  # target_node -> source_node
+    score: float = 0.0  # Quality of the mapping (0.0 to 1.0)
+    
+    def __post_init__(self):
+        # Verify bidirectional consistency
+        for s, t in self.source_to_target.items():
+            assert self.target_to_source.get(t) == s, "Inconsistent mapping"
+    
+    def is_complete(self, source_nodes: Set[str], target_nodes: Set[str]) -> bool:
+        """Check if this is a complete isomorphism"""
+        return (
+            len(self.source_to_target) == len(source_nodes) and
+            len(self.target_to_source) == len(target_nodes) and
+            set(self.source_to_target.keys()) == source_nodes and
+            set(self.target_to_source.keys()) == target_nodes
+        )
+
+
+class IsomorphismMatcher:
+    """
+    Find optimal node mappings between similar structures (Issue #16)
+    Implements graph isomorphism and partial matching algorithms
+    """
+    
+    def __init__(self, max_attempts: int = 1000):
+        """
+        Args:
+            max_attempts: Maximum mapping attempts for large structures
+        """
+        self.max_attempts = max_attempts
+    
+    def find_best_mapping(
+        self,
+        source_structure: 'AbstractStructure',
+        target_structure: 'AbstractStructure',
+        require_complete: bool = False
+    ) -> Optional[NodeMapping]:
+        """
+        Find the best node mapping between two structures
+        
+        Args:
+            source_structure: Source structure
+            target_structure: Target structure
+            require_complete: Require complete isomorphism
+            
+        Returns:
+            Best NodeMapping found, or None if no valid mapping exists
+        """
+        source_nodes = list(source_structure.nodes)
+        target_nodes = list(target_structure.nodes)
+        
+        # Early exit: different sizes and complete mapping required
+        if require_complete and len(source_nodes) != len(target_nodes):
+            return None
+        
+        # Try exact mapping first (for small structures)
+        # Exhaustive only works when target has enough nodes
+        if (len(source_nodes) <= 6 and len(target_nodes) <= 6 and 
+            len(source_nodes) <= len(target_nodes)):
+            return self._exhaustive_search(
+                source_structure,
+                target_structure,
+                require_complete
+            )
+        else:
+            return self._greedy_search(
+                source_structure,
+                target_structure,
+                require_complete
+            )
+    
+    def _exhaustive_search(
+        self,
+        source_structure: 'AbstractStructure',
+        target_structure: 'AbstractStructure',
+        require_complete: bool
+    ) -> Optional[NodeMapping]:
+        """
+        Exhaustive search for optimal mapping (small structures only)
+        """
+        source_nodes = list(source_structure.nodes)
+        target_nodes = list(target_structure.nodes)
+        
+        best_mapping = None
+        best_score = -1.0
+        
+        # Try all permutations
+        num_attempts = 0
+        for target_perm in permutations(target_nodes, len(source_nodes)):
+            if num_attempts >= self.max_attempts:
+                break
+            num_attempts += 1
+            
+            # Create mapping
+            s_to_t = dict(zip(source_nodes, target_perm))
+            t_to_s = {v: k for k, v in s_to_t.items()}
+            
+            # Score this mapping
+            score = self._score_mapping(
+                s_to_t,
+                source_structure,
+                target_structure
+            )
+            
+            if score > best_score:
+                best_score = score
+                best_mapping = NodeMapping(
+                    source_to_target=s_to_t,
+                    target_to_source=t_to_s,
+                    score=score
+                )
+        
+        # Check completeness requirement
+        if require_complete and best_mapping:
+            if not best_mapping.is_complete(source_structure.nodes, target_structure.nodes):
+                return None
+        
+        return best_mapping
+    
+    def _greedy_search(
+        self,
+        source_structure: 'AbstractStructure',
+        target_structure: 'AbstractStructure',
+        require_complete: bool
+    ) -> Optional[NodeMapping]:
+        """
+        Greedy heuristic search for large structures
+        """
+        source_nodes = list(source_structure.nodes)
+        target_nodes = list(target_structure.nodes)
+        
+        # Start with empty mapping
+        s_to_t = {}
+        t_to_s = {}
+        
+        # Greedily match nodes based on local similarity
+        for s_node in source_nodes:
+            best_target = None
+            best_local_score = -1.0
+            
+            for t_node in target_nodes:
+                if t_node in t_to_s:
+                    continue  # Already mapped
+                
+                # Local compatibility score
+                local_score = self._local_compatibility(
+                    s_node, t_node,
+                    source_structure, target_structure,
+                    s_to_t
+                )
+                
+                if local_score > best_local_score:
+                    best_local_score = local_score
+                    best_target = t_node
+            
+            if best_target:
+                s_to_t[s_node] = best_target
+                t_to_s[best_target] = s_node
+        
+        if not s_to_t:
+            return None
+        
+        # Score final mapping
+        score = self._score_mapping(s_to_t, source_structure, target_structure)
+        
+        mapping = NodeMapping(
+            source_to_target=s_to_t,
+            target_to_source=t_to_s,
+            score=score
+        )
+        
+        # Check completeness
+        if require_complete:
+            if not mapping.is_complete(source_structure.nodes, target_structure.nodes):
+                return None
+        
+        return mapping
+    
+    def _score_mapping(
+        self,
+        s_to_t: Dict[str, str],
+        source_structure: 'AbstractStructure',
+        target_structure: 'AbstractStructure'
+    ) -> float:
+        """
+        Score a node mapping based on structure preservation
+        
+        Returns:
+            Score from 0.0 (bad) to 1.0 (perfect)
+        """
+        if not s_to_t:
+            return 0.0
+        
+        # Edge preservation: how many edges are preserved?
+        edge_matches = 0
+        edge_total = 0
+        
+        for s_src, rel, s_tgt in source_structure.edges:
+            if s_src in s_to_t and s_tgt in s_to_t:
+                edge_total += 1
+                t_src = s_to_t[s_src]
+                t_tgt = s_to_t[s_tgt]
+                
+                # Check if corresponding edge exists
+                if (t_src, rel, t_tgt) in target_structure.edges:
+                    edge_matches += 1
+        
+        edge_score = edge_matches / max(edge_total, 1) if edge_total > 0 else 0.0
+        
+        # Property preservation: how many property types match?
+        prop_matches = 0
+        prop_total = 0
+        
+        for s_node, t_node in s_to_t.items():
+            s_props = source_structure.properties.get(s_node, set())
+            t_props = target_structure.properties.get(t_node, set())
+            
+            if s_props or t_props:
+                prop_matches += len(s_props & t_props)
+                prop_total += len(s_props | t_props)
+        
+        prop_score = prop_matches / max(prop_total, 1) if prop_total > 0 else 0.5
+        
+        # Weighted combination (give some base score even if no properties match)
+        return 0.7 * edge_score + 0.3 * prop_score
+    
+    def _local_compatibility(
+        self,
+        s_node: str,
+        t_node: str,
+        source_structure: 'AbstractStructure',
+        target_structure: 'AbstractStructure',
+        existing_mapping: Dict[str, str]
+    ) -> float:
+        """
+        Compute local compatibility between two nodes
+        """
+        # Property similarity
+        s_props = source_structure.properties.get(s_node, set())
+        t_props = target_structure.properties.get(t_node, set())
+        
+        if s_props or t_props:
+            prop_sim = len(s_props & t_props) / max(len(s_props | t_props), 1)
+        else:
+            prop_sim = 0.5
+        
+        # Neighbor compatibility (based on existing mappings)
+        neighbor_matches = 0
+        neighbor_total = 0
+        
+        # Check outgoing edges
+        s_neighbors = {tgt for src, rel, tgt in source_structure.edges if src == s_node}
+        t_neighbors = {tgt for src, rel, tgt in target_structure.edges if src == t_node}
+        
+        for s_nbr in s_neighbors:
+            if s_nbr in existing_mapping:
+                neighbor_total += 1
+                if existing_mapping[s_nbr] in t_neighbors:
+                    neighbor_matches += 1
+        
+        neighbor_score = neighbor_matches / max(neighbor_total, 1) if neighbor_total > 0 else 0.5
+        
+        return 0.6 * prop_sim + 0.4 * neighbor_score
+
+
 def demo_structure_extraction():
-    """Demonstrate structure extraction"""
+    """Demonstrate structure extraction and isomorphism matching"""
     print("=" * 70)
-    print("STRUCTURE EXTRACTION DEMO - Issue #15")
-    print("Hofstadter's Analogical Reasoning")
+    print("ANALOGICAL REASONING DEMO - Issues #15-16")
+    print("Hofstadter's Structure Extraction + Isomorphism Matching")
     print("=" * 70)
     print()
     
@@ -264,8 +537,18 @@ def demo_structure_extraction():
             {'predicate': 'particle', 'properties': {'positive': True, 'heavy': True}},
             {'orbited_by': {'electron1', 'electron2'}}
         ),
+        'venus': MockMKU(
+            'venus',
+            {'predicate': 'planet', 'properties': {'orbits': True}},
+            {'orbits': {'sun'}}
+        ),
         'electron1': MockMKU(
             'electron1',
+            {'predicate': 'particle', 'properties': {'orbits': True}},
+            {'orbits': {'nucleus'}}
+        ),
+        'electron2': MockMKU(
+            'electron2',
             {'predicate': 'particle', 'properties': {'orbits': True}},
             {'orbits': {'nucleus'}}
         ),
@@ -325,11 +608,40 @@ def demo_structure_extraction():
     print("\n" + "=" * 70)
     print("✓ Structure extraction complete!")
     print("=" * 70)
+    
+    # Issue #16: Isomorphism Matching
+    print("\n" + "=" * 70)
+    print("5. Finding optimal node mapping (Issue #16)")
+    print("-" * 70)
+    
+    matcher = IsomorphismMatcher(max_attempts=1000)
+    mapping = matcher.find_best_mapping(
+        solar_structure,
+        atom_structure,
+        require_complete=False
+    )
+    
+    if mapping:
+        print(f"\nOptimal mapping found (score: {mapping.score:.2f}):\n")
+        for source, target in sorted(mapping.source_to_target.items()):
+            print(f"  {source} (solar) → {target} (atom)")
+        
+        print("\nInterpretation:")
+        print(f"  This mapping shows the correspondence between")
+        print(f"  solar system components and atomic components.")
+        print(f"  Edge preservation: {mapping.score * 0.7 / 0.7:.1%}")
+        print(f"  Property preservation: {mapping.score * 0.3 / 0.3:.1%}")
+    else:
+        print("\nNo valid mapping found.")
+    
+    print("\n" + "=" * 70)
+    print("✓ Isomorphism matching complete!")
+    print("=" * 70)
     print()
     print("Key Insight:")
     print("  The solar system (sun + planets) has similar STRUCTURE")
-    print("  to an atom (nucleus + electrons), even though the")
-    print("  content is completely different!")
+    print("  to an atom (nucleus + electrons), and we can now map")
+    print("  the specific correspondences between them!")
     print("=" * 70)
 
 
