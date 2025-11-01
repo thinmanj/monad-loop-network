@@ -1,0 +1,72 @@
+{
+  "experiment": "consciousness_growth",
+  "hypothesis": "More integrated knowledge leads to higher consciousness",
+  "measurements": [
+    {
+      "batch_name": "Batch 1: Basic Biology (6 concepts)",
+      "total_concepts": 6,
+      "concepts_added": 6,
+      "consciousness_score": 0.37064354645876385,
+      "consciousness_level": "MINIMALLY CONSCIOUS - Basic reasoning",
+      "recursion_depth": 0,
+      "integration_phi": 0.18257418583505536,
+      "causal_density": 1.0,
+      "understanding_score": 0.5,
+      "timestamp": 1761999124.538251
+    },
+    {
+      "batch_name": "Batch 2: Mammals (8 concepts)",
+      "total_concepts": 14,
+      "concepts_added": 8,
+      "consciousness_score": 0.3606226453052084,
+      "consciousness_level": "MINIMALLY CONSCIOUS - Basic reasoning",
+      "recursion_depth": 0,
+      "integration_phi": 0.25677629550654774,
+      "causal_density": 0.8571428571428571,
+      "understanding_score": 0.5,
+      "timestamp": 1761999125.046029
+    },
+    {
+      "batch_name": "Batch 3: Birds (5 concepts)",
+      "total_concepts": 19,
+      "concepts_added": 5,
+      "consciousness_score": 0.3596853729260475,
+      "consciousness_level": "MINIMALLY CONSCIOUS - Basic reasoning",
+      "recursion_depth": 0,
+      "integration_phi": 0.22295201801997955,
+      "causal_density": 0.8947368421052632,
+      "understanding_score": 0.5,
+      "timestamp": 1761999125.556234
+    },
+    {
+      "batch_name": "Batch 4: Abstract Concepts (5 concepts)",
+      "total_concepts": 24,
+      "concepts_added": 5,
+      "consciousness_score": 0.3600310363079829,
+      "consciousness_level": "MINIMALLY CONSCIOUS - Basic reasoning",
+      "recursion_depth": 0,
+      "integration_phi": 0.2041241452319315,
+      "causal_density": 0.92,
+      "understanding_score": 0.5,
+      "timestamp": 1761999126.069252
+    },
+    {
+      "batch_name": "Batch 5: Meta-Concepts (5 concepts)",
+      "total_concepts": 29,
+      "concepts_added": 5,
+      "consciousness_score": 0.3639700856025626,
+      "consciousness_level": "MINIMALLY CONSCIOUS - Basic reasoning",
+      "recursion_depth": 0,
+      "integration_phi": 0.20159462812453596,
+      "causal_density": 0.9428571428571428,
+      "understanding_score": 0.5,
+      "timestamp": 1761999126.583057
+    }
+  ],
+  "summary": {
+    "initial_consciousness": 0.37064354645876385,
+    "final_consciousness": 0.3639700856025626,
+    "total_growth": -0.006673460856201241,
+    "total_concepts": 29
+  }
+}
