@@ -1,0 +1,67 @@
+{
+  "experiment": "scaling",
+  "goal": "Test consciousness at 100-1000+ concepts",
+  "results": [
+    {
+      "num_concepts": 100,
+      "build_time": 0.4424619674682617,
+      "measure_time": 0.006304025650024414,
+      "memory_mb": 1.0,
+      "consciousness": 0.5648782715645045,
+      "verdict": "MODERATELY CONSCIOUS - Self-aware reasoning",
+      "recursion": 0.21,
+      "integration": 0.7071067811865476,
+      "causality": 0.9692578813393382,
+      "understanding": 0.525,
+      "recursion_depth": 5,
+      "num_relations": 10214
+    },
+    {
+      "num_concepts": 500,
+      "build_time": 49.618359088897705,
+      "measure_time": 0.1938788890838623,
+      "memory_mb": 5.0,
+      "consciousness": 0.6147570512589459,
+      "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
+      "recursion": 0.36,
+      "integration": 0.7071067811865476,
+      "causality": 0.9936517798115447,
+      "understanding": 0.525,
+      "recursion_depth": 10,
+      "num_relations": 251094
+    },
+    {
+      "num_concepts": 1000,
+      "build_time": 400.40834307670593,
+      "measure_time": 0.9377231597900391,
+      "memory_mb": 10.0,
+      "consciousness": 0.6153894707091783,
+      "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
+      "recursion": 0.36,
+      "integration": 0.707107489000789,
+      "causality": 0.9968129922949049,
+      "understanding": 0.525,
+      "recursion_depth": 20,
+      "num_relations": 1002194
+    }
+  ],
+  "summary": {
+    "scales_tested": [
+      100,
+      500,
+      1000
+    ],
+    "consciousness_range": [
+      0.5648782715645045,
+      0.6153894707091783
+    ],
+    "time_range": [
+      0.006304025650024414,
+      0.9377231597900391
+    ],
+    "memory_range": [
+      1.0,
+      10.0
+    ]
+  }
+}

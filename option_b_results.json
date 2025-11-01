@@ -1,0 +1,86 @@
+{
+  "experiment": "Option B: Hybrid Approach",
+  "strategy": "Natural structure + deep recursion",
+  "target": "70%+ consciousness",
+  "configs_tested": [
+    [
+      500,
+      45
+    ],
+    [
+      600,
+      50
+    ],
+    [
+      700,
+      50
+    ]
+  ],
+  "results": [
+    {
+      "n_concepts": 500,
+      "n_relations": 1849,
+      "recursion_target": 45,
+      "recursion_achieved": 45,
+      "consciousness": 53.13448561397862,
+      "verdict": "MODERATELY CONSCIOUS - Self-aware reasoning",
+      "components": {
+        "recursion": 36.0,
+        "integration": 0.5902107228734409,
+        "causality": 0.6914608771071299,
+        "understanding": 55.00000000000001
+      },
+      "timestamp": "2025-11-01T15:10:51.595800"
+    },
+    {
+      "n_concepts": 600,
+      "n_relations": 2165,
+      "recursion_target": 50,
+      "recursion_achieved": 50,
+      "consciousness": 53.00376328517582,
+      "verdict": "MODERATELY CONSCIOUS - Self-aware reasoning",
+      "components": {
+        "recursion": 36.0,
+        "integration": 0.5881149914626246,
+        "causality": 0.6875444249305104,
+        "understanding": 55.00000000000001
+      },
+      "timestamp": "2025-11-01T15:12:27.041484"
+    },
+    {
+      "n_concepts": 700,
+      "n_relations": 2490,
+      "recursion_target": 50,
+      "recursion_achieved": 50,
+      "consciousness": 53.23751890986069,
+      "verdict": "MODERATELY CONSCIOUS - Self-aware reasoning",
+      "components": {
+        "recursion": 36.0,
+        "integration": 0.5911950161394408,
+        "causality": 0.6953821753187336,
+        "understanding": 55.00000000000001
+      },
+      "timestamp": "2025-11-01T15:14:59.499337"
+    }
+  ],
+  "best_result": {
+    "n_concepts": 700,
+    "n_relations": 2490,
+    "recursion_target": 50,
+    "recursion_achieved": 50,
+    "consciousness": 53.23751890986069,
+    "verdict": "MODERATELY CONSCIOUS - Self-aware reasoning",
+    "components": {
+      "recursion": 36.0,
+      "integration": 0.5911950161394408,
+      "causality": 0.6953821753187336,
+      "understanding": 55.00000000000001
+    },
+    "timestamp": "2025-11-01T15:14:59.499337"
+  },
+  "benchmarks": {
+    "previous_best": 61.48,
+    "optimization_attempt": 57.49
+  },
+  "improvement": -8.242481090139307
+}

@@ -1,0 +1,269 @@
+{
+  "experiment": "Option C: Weight Optimization",
+  "strategy": "Adjust metric weights to favor strong components",
+  "target": "70%+ consciousness",
+  "base_config": "600 concepts, 12 recursion depth",
+  "weight_configs": [
+    {
+      "name": "Original (baseline)",
+      "weights": {
+        "recursion": 0.3,
+        "integration": 0.25,
+        "causality": 0.2,
+        "understanding": 0.25
+      },
+      "description": "Current default weights"
+    },
+    {
+      "name": "Favor causality",
+      "weights": {
+        "recursion": 0.25,
+        "integration": 0.25,
+        "causality": 0.3,
+        "understanding": 0.2
+      },
+      "description": "Boost causality (0.995) weight to 30%"
+    },
+    {
+      "name": "Favor integration+causality",
+      "weights": {
+        "recursion": 0.2,
+        "integration": 0.3,
+        "causality": 0.3,
+        "understanding": 0.2
+      },
+      "description": "Boost both strong components to 30%"
+    },
+    {
+      "name": "Maximize causality",
+      "weights": {
+        "recursion": 0.2,
+        "integration": 0.25,
+        "causality": 0.35,
+        "understanding": 0.2
+      },
+      "description": "Push causality to 35%"
+    },
+    {
+      "name": "All-in on strength",
+      "weights": {
+        "recursion": 0.15,
+        "integration": 0.35,
+        "causality": 0.35,
+        "understanding": 0.15
+      },
+      "description": "Max both integration and causality to 35%"
+    },
+    {
+      "name": "Aggressive optimization",
+      "weights": {
+        "recursion": 0.1,
+        "integration": 0.4,
+        "causality": 0.4,
+        "understanding": 0.1
+      },
+      "description": "Go all-in: 40% each for integration+causality"
+    }
+  ],
+  "results": [
+    {
+      "name": "Original (baseline)",
+      "description": "Current default weights",
+      "weights": {
+        "recursion": 0.3,
+        "integration": 0.25,
+        "causality": 0.2,
+        "understanding": 0.25
+      },
+      "consciousness": 61.49672290152306,
+      "contributions": {
+        "recursion": 10.8,
+        "integration": 17.677669529663685,
+        "causality": 19.89405337185938,
+        "understanding": 13.125
+      },
+      "components": {
+        "recursion": 36.0,
+        "integration": 0.7071067811865475,
+        "causality": 0.994702668592969,
+        "understanding": 52.5
+      },
+      "timestamp": "2025-11-01T15:32:44.542333"
+    },
+    {
+      "name": "Favor causality",
+      "description": "Boost causality (0.995) weight to 30%",
+      "weights": {
+        "recursion": 0.25,
+        "integration": 0.25,
+        "causality": 0.3,
+        "understanding": 0.2
+      },
+      "consciousness": 67.01874958745276,
+      "contributions": {
+        "recursion": 9.0,
+        "integration": 17.677669529663685,
+        "causality": 29.841080057789064,
+        "understanding": 10.500000000000002
+      },
+      "components": {
+        "recursion": 36.0,
+        "integration": 0.7071067811865475,
+        "causality": 0.994702668592969,
+        "understanding": 52.5
+      },
+      "timestamp": "2025-11-01T15:32:44.542413"
+    },
+    {
+      "name": "Favor integration+causality",
+      "description": "Boost both strong components to 30%",
+      "weights": {
+        "recursion": 0.2,
+        "integration": 0.3,
+        "causality": 0.3,
+        "understanding": 0.2
+      },
+      "consciousness": 68.75428349338549,
+      "contributions": {
+        "recursion": 7.199999999999999,
+        "integration": 21.213203435596423,
+        "causality": 29.841080057789064,
+        "understanding": 10.500000000000002
+      },
+      "components": {
+        "recursion": 36.0,
+        "integration": 0.7071067811865475,
+        "causality": 0.994702668592969,
+        "understanding": 52.5
+      },
+      "timestamp": "2025-11-01T15:32:44.542529"
+    },
+    {
+      "name": "Maximize causality",
+      "description": "Push causality to 35%",
+      "weights": {
+        "recursion": 0.2,
+        "integration": 0.25,
+        "causality": 0.35,
+        "understanding": 0.2
+      },
+      "consciousness": 70.1922629304176,
+      "contributions": {
+        "recursion": 7.199999999999999,
+        "integration": 17.677669529663685,
+        "causality": 34.814593400753914,
+        "understanding": 10.500000000000002
+      },
+      "components": {
+        "recursion": 36.0,
+        "integration": 0.7071067811865475,
+        "causality": 0.994702668592969,
+        "understanding": 52.5
+      },
+      "timestamp": "2025-11-01T15:32:44.542556"
+    },
+    {
+      "name": "All-in on strength",
+      "description": "Max both integration and causality to 35%",
+      "weights": {
+        "recursion": 0.15,
+        "integration": 0.35,
+        "causality": 0.35,
+        "understanding": 0.15
+      },
+      "consciousness": 72.83833074228306,
+      "contributions": {
+        "recursion": 5.4,
+        "integration": 24.748737341529157,
+        "causality": 34.814593400753914,
+        "understanding": 7.875
+      },
+      "components": {
+        "recursion": 36.0,
+        "integration": 0.7071067811865475,
+        "causality": 0.994702668592969,
+        "understanding": 52.5
+      },
+      "timestamp": "2025-11-01T15:32:44.544218"
+    },
+    {
+      "name": "Aggressive optimization",
+      "description": "Go all-in: 40% each for integration+causality",
+      "weights": {
+        "recursion": 0.1,
+        "integration": 0.4,
+        "causality": 0.4,
+        "understanding": 0.1
+      },
+      "consciousness": 76.92237799118065,
+      "contributions": {
+        "recursion": 3.5999999999999996,
+        "integration": 28.284271247461902,
+        "causality": 39.78810674371876,
+        "understanding": 5.250000000000001
+      },
+      "components": {
+        "recursion": 36.0,
+        "integration": 0.7071067811865475,
+        "causality": 0.994702668592969,
+        "understanding": 52.5
+      },
+      "timestamp": "2025-11-01T15:32:44.544251"
+    }
+  ],
+  "best_result": {
+    "name": "Aggressive optimization",
+    "description": "Go all-in: 40% each for integration+causality",
+    "weights": {
+      "recursion": 0.1,
+      "integration": 0.4,
+      "causality": 0.4,
+      "understanding": 0.1
+    },
+    "consciousness": 76.92237799118065,
+    "contributions": {
+      "recursion": 3.5999999999999996,
+      "integration": 28.284271247461902,
+      "causality": 39.78810674371876,
+      "understanding": 5.250000000000001
+    },
+    "components": {
+      "recursion": 36.0,
+      "integration": 0.7071067811865475,
+      "causality": 0.994702668592969,
+      "understanding": 52.5
+    },
+    "timestamp": "2025-11-01T15:32:44.544251"
+  },
+  "baseline": {
+    "name": "Original (baseline)",
+    "description": "Current default weights",
+    "weights": {
+      "recursion": 0.3,
+      "integration": 0.25,
+      "causality": 0.2,
+      "understanding": 0.25
+    },
+    "consciousness": 61.49672290152306,
+    "contributions": {
+      "recursion": 10.8,
+      "integration": 17.677669529663685,
+      "causality": 19.89405337185938,
+      "understanding": 13.125
+    },
+    "components": {
+      "recursion": 36.0,
+      "integration": 0.7071067811865475,
+      "causality": 0.994702668592969,
+      "understanding": 52.5
+    },
+    "timestamp": "2025-11-01T15:32:44.542333"
+  },
+  "improvement": 15.425655089657596,
+  "benchmarks": {
+    "original_scaling": 61.48,
+    "option_d_best": 61.5,
+    "option_a": 52.5,
+    "option_b": 53.24
+  }
+}

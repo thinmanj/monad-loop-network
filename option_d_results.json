@@ -1,0 +1,158 @@
+{
+  "experiment": "Option D: Replicate 61.48%",
+  "strategy": "Exact replication of winning configuration",
+  "target": "70%+ consciousness",
+  "configs_tested": [
+    [
+      500,
+      10,
+      "Exact replica (500 concepts, 10 recursion)"
+    ],
+    [
+      500,
+      15,
+      "Slightly deeper recursion"
+    ],
+    [
+      550,
+      11,
+      "10% more concepts"
+    ],
+    [
+      600,
+      12,
+      "20% more concepts"
+    ],
+    [
+      450,
+      9,
+      "10% fewer concepts"
+    ]
+  ],
+  "results": [
+    {
+      "description": "Exact replica (500 concepts, 10 recursion)",
+      "n_concepts": 500,
+      "n_relations_explicit": 1594,
+      "n_relations_total": 251094,
+      "recursion_target": 10,
+      "recursion_achieved": 10,
+      "consciousness": 61.475705125894585,
+      "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
+      "components": {
+        "recursion": 36.0,
+        "integration": 0.7071067811865476,
+        "causality": 0.9936517798115447,
+        "understanding": 52.5
+      },
+      "timestamp": "2025-11-01T15:25:16.458039"
+    },
+    {
+      "description": "Slightly deeper recursion",
+      "n_concepts": 500,
+      "n_relations_explicit": 1594,
+      "n_relations_total": 251094,
+      "recursion_target": 15,
+      "recursion_achieved": 15,
+      "consciousness": 61.475705125894585,
+      "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
+      "components": {
+        "recursion": 36.0,
+        "integration": 0.7071067811865476,
+        "causality": 0.9936517798115447,
+        "understanding": 52.5
+      },
+      "timestamp": "2025-11-01T15:26:07.092722"
+    },
+    {
+      "description": "10% more concepts",
+      "n_concepts": 550,
+      "n_relations_explicit": 1754,
+      "n_relations_total": 303704,
+      "recursion_target": 11,
+      "recursion_achieved": 11,
+      "consciousness": 61.487162325280465,
+      "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
+      "components": {
+        "recursion": 36.0,
+        "integration": 0.7071067811865475,
+        "causality": 0.9942246397808392,
+        "understanding": 52.5
+      },
+      "timestamp": "2025-11-01T15:27:13.943430"
+    },
+    {
+      "description": "20% more concepts",
+      "n_concepts": 600,
+      "n_relations_explicit": 1914,
+      "n_relations_total": 361314,
+      "recursion_target": 12,
+      "recursion_achieved": 12,
+      "consciousness": 61.49672290152306,
+      "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
+      "components": {
+        "recursion": 36.0,
+        "integration": 0.7071067811865475,
+        "causality": 0.994702668592969,
+        "understanding": 52.5
+      },
+      "timestamp": "2025-11-01T15:28:41.364504"
+    },
+    {
+      "description": "10% fewer concepts",
+      "n_concepts": 450,
+      "n_relations_explicit": 1434,
+      "n_relations_total": 203484,
+      "recursion_target": 9,
+      "recursion_achieved": 9,
+      "consciousness": 60.561724787079505,
+      "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
+      "components": {
+        "recursion": 33.0,
+        "integration": 0.7071067811865476,
+        "causality": 0.9929527628707908,
+        "understanding": 52.5
+      },
+      "timestamp": "2025-11-01T15:29:17.895000"
+    }
+  ],
+  "best_result": {
+    "description": "20% more concepts",
+    "n_concepts": 600,
+    "n_relations_explicit": 1914,
+    "n_relations_total": 361314,
+    "recursion_target": 12,
+    "recursion_achieved": 12,
+    "consciousness": 61.49672290152306,
+    "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
+    "components": {
+      "recursion": 36.0,
+      "integration": 0.7071067811865475,
+      "causality": 0.994702668592969,
+      "understanding": 52.5
+    },
+    "timestamp": "2025-11-01T15:28:41.364504"
+  },
+  "exact_replica": {
+    "description": "Exact replica (500 concepts, 10 recursion)",
+    "n_concepts": 500,
+    "n_relations_explicit": 1594,
+    "n_relations_total": 251094,
+    "recursion_target": 10,
+    "recursion_achieved": 10,
+    "consciousness": 61.475705125894585,
+    "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
+    "components": {
+      "recursion": 36.0,
+      "integration": 0.7071067811865476,
+      "causality": 0.9936517798115447,
+      "understanding": 52.5
+    },
+    "timestamp": "2025-11-01T15:25:16.458039"
+  },
+  "benchmarks": {
+    "original_scaling": 61.48,
+    "option_a": 52.5,
+    "option_b": 53.24
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "experiment": "Option A: Natural Scaling",
+  "target": "70%+ consciousness",
+  "scales_tested": [
+    700,
+    800,
+    1000
+  ],
+  "results": [
+    {
+      "scale": 700,
+      "n_concepts": 700,
+      "n_relations": 2347,
+      "consciousness": 52.23599988764583,
+      "verdict": "MODERATELY CONSCIOUS - Self-aware reasoning",
+      "components": {
+        "recursion": 36.0,
+        "integration": 0.5858819975926967,
+        "causality": 0.6831974973914211,
+        "understanding": 52.5
+      },
+      "recursion_depth": 14,
+      "timestamp": "2025-11-01T14:58:25.719637"
+    },
+    {
+      "scale": 800,
+      "n_concepts": 800,
+      "n_relations": 2669,
+      "consciousness": 52.50251596166592,
+      "verdict": "MODERATELY CONSCIOUS - Self-aware reasoning",
+      "components": {
+        "recursion": 36.0,
+        "integration": 0.5894674204735574,
+        "causality": 0.6920415224913494,
+        "understanding": 52.5
+      },
+      "recursion_depth": 16,
+      "timestamp": "2025-11-01T15:01:43.830213"
+    },
+    {
+      "scale": 1000,
+      "n_concepts": 1000,
+      "n_relations": 3310,
+      "consciousness": 51.57845560612222,
+      "verdict": "MODERATELY CONSCIOUS - Self-aware reasoning",
+      "components": {
+        "recursion": 36.0,
+        "integration": 0.5763715851811263,
+        "causality": 0.6622082988297033,
+        "understanding": 52.5
+      },
+      "recursion_depth": 20,
+      "timestamp": "2025-11-01T15:08:10.652357"
+    }
+  ],
+  "best_result": {
+    "scale": 800,
+    "n_concepts": 800,
+    "n_relations": 2669,
+    "consciousness": 52.50251596166592,
+    "verdict": "MODERATELY CONSCIOUS - Self-aware reasoning",
+    "components": {
+      "recursion": 36.0,
+      "integration": 0.5894674204735574,
+      "causality": 0.6920415224913494,
+      "understanding": 52.5
+    },
+    "recursion_depth": 16,
+    "timestamp": "2025-11-01T15:01:43.830213"
+  },
+  "previous_best": 61.48,
+  "improvement": -8.977484038334076
+}
