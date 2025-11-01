@@ -250,12 +250,15 @@ class KnowledgeGraph:
         return InferenceChain([])  # No path found
     
     def add_inference_rule(self, rule: 'InferenceRule'):
-        """Add a transformation rule for reasoning"""
+        """Add a transformation rule for reasoning (Issue #5: with priority sorting)"""
         self.inference_rules.append(rule)
+        # Sort rules by priority (lower number = higher priority)
+        self.inference_rules.sort(key=lambda r: r.priority)
     
     def apply_inference(self, premise: MonadicKnowledgeUnit) -> List[MonadicKnowledgeUnit]:
-        """Apply inference rules to derive new knowledge"""
+        """Apply inference rules to derive new knowledge (in priority order)"""
         conclusions = []
+        # Rules are already sorted by priority
         for rule in self.inference_rules:
             if rule.can_apply(premise):
                 conclusion = rule.apply(premise, self)
@@ -302,7 +305,19 @@ class InferenceChain:
 # ============================================================================
 
 class InferenceRule(ABC):
-    """Abstract inference rule"""
+    """
+    Abstract inference rule with priority support (Issue #5)
+    
+    Priority levels:
+    - 0: Highest priority (e.g., Modus Ponens - direct logical inference)
+    - 1: High priority (e.g., Transitivity - structural reasoning)
+    - 2: Medium priority (e.g., Symmetry - bidirectional relations)
+    - 3: Low priority (e.g., Contraposition - derived implications)
+    - 4+: Lowest priority (experimental rules)
+    """
+    def __init__(self, priority: int = 1):
+        self.priority = priority
+    
     @abstractmethod
     def can_apply(self, premise: MonadicKnowledgeUnit) -> bool:
         pass
@@ -310,10 +325,17 @@ class InferenceRule(ABC):
     @abstractmethod
     def apply(self, premise: MonadicKnowledgeUnit, kg: KnowledgeGraph) -> Optional[MonadicKnowledgeUnit]:
         pass
+    
+    def __lt__(self, other):
+        """Compare rules by priority (lower number = higher priority)"""
+        return self.priority < other.priority
 
 
 class TransitivityRule(InferenceRule):
-    """If A→B and B→C, then A→C"""
+    """If A→B and B→C, then A→C (Priority: 1 - High)"""
+    def __init__(self):
+        super().__init__(priority=1)
+    
     def can_apply(self, premise: MonadicKnowledgeUnit) -> bool:
         return bool(premise.relations)
     
@@ -338,7 +360,10 @@ class TransitivityRule(InferenceRule):
 
 
 class SubstitutionRule(InferenceRule):
-    """Substitute equivalent concepts"""
+    """Substitute equivalent concepts (Priority: 1 - High)"""
+    def __init__(self):
+        super().__init__(priority=1)
+    
     def can_apply(self, premise: MonadicKnowledgeUnit) -> bool:
         return 'equivalence' in premise.relations
     
@@ -363,8 +388,12 @@ class ModusPonensRule(InferenceRule):
     Modus Ponens: If A→B and A, then B
     If we have an implication and its antecedent, infer the consequent
     
+    Priority: 0 (Highest) - Direct logical inference
     Issue #4
     """
+    def __init__(self):
+        super().__init__(priority=0)
+    
     def can_apply(self, premise: MonadicKnowledgeUnit) -> bool:
         # Check if premise has 'implies' relation
         return 'implies' in premise.relations or 'subtype' in premise.relations
@@ -399,8 +428,12 @@ class ContrapositionRule(InferenceRule):
     Contraposition: If A→B, then ¬B→¬A
     From an implication, derive its contrapositive
     
+    Priority: 3 (Low) - Derived implications
     Issue #4
     """
+    def __init__(self):
+        super().__init__(priority=3)
+    
     def can_apply(self, premise: MonadicKnowledgeUnit) -> bool:
         return 'implies' in premise.relations or 'subtype' in premise.relations
     
@@ -430,10 +463,14 @@ class SymmetryRule(InferenceRule):
     Symmetry: If A relates B (symmetric relation), then B relates A
     For relations that are inherently symmetric (like 'sibling', 'equivalent')
     
+    Priority: 2 (Medium) - Bidirectional relations
     Issue #4
     """
     # Define which relations are symmetric
     SYMMETRIC_RELATIONS = {'equivalence', 'sibling', 'peer', 'similar_to'}
+    
+    def __init__(self):
+        super().__init__(priority=2)
     
     def can_apply(self, premise: MonadicKnowledgeUnit) -> bool:
         # Check if premise has any symmetric relations
@@ -473,9 +510,13 @@ class CompositionRule(InferenceRule):
     Composition: Combine multiple inference rules
     If we can apply two rules in sequence, compose them
     
+    Priority: Max of composed rules + 1 (lower priority than components)
     Issue #4
     """
     def __init__(self, rule1: InferenceRule, rule2: InferenceRule):
+        # Composition has lower priority than its components
+        combined_priority = max(rule1.priority, rule2.priority) + 1
+        super().__init__(priority=combined_priority)
         self.rule1 = rule1
         self.rule2 = rule2
     
