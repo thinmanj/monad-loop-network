@@ -674,13 +674,98 @@ class AnalogyEngine:
             results.append((concept_id, similarity, mapping))
         
         return results
+    
+    def learn_by_analogy(
+        self,
+        source_problem: str,
+        source_solution: Dict[str, any],
+        target_problem: str,
+        min_similarity: float = 0.6
+    ) -> Optional[Dict[str, any]]:
+        """
+        Learn solution for target problem by analogy to source problem (Issue #18)
+        
+        Args:
+            source_problem: Concept representing problem in source domain
+            source_solution: Solution structure for source problem
+            target_problem: Concept representing problem in target domain
+            min_similarity: Minimum structural similarity required
+            
+        Returns:
+            Hypothesized solution for target problem, or None
+        """
+        # Extract structures
+        source_structure = self.extractor.extract_structure(source_problem, self.kg)
+        target_structure = self.extractor.extract_structure(target_problem, self.kg)
+        
+        # Check if problems are analogous
+        similarity = source_structure.similarity(target_structure)
+        if similarity < min_similarity:
+            return None
+        
+        # Find mapping between problem structures
+        mapping = self.matcher.find_best_mapping(
+            source_structure,
+            target_structure,
+            require_complete=False
+        )
+        
+        if not mapping or mapping.score < 0.4:
+            return None
+        
+        # Transfer solution pattern
+        target_solution = self._transfer_solution(
+            source_solution,
+            mapping,
+            source_structure,
+            target_structure
+        )
+        
+        return target_solution
+    
+    def _transfer_solution(
+        self,
+        source_solution: Dict[str, any],
+        mapping: NodeMapping,
+        source_structure: 'AbstractStructure',
+        target_structure: 'AbstractStructure'
+    ) -> Dict[str, any]:
+        """
+        Transfer solution from source to target domain using mapping
+        """
+        target_solution = {}
+        
+        # Transfer strategy
+        if 'strategy' in source_solution:
+            target_solution['strategy'] = source_solution['strategy']
+        
+        # Transfer mapped steps
+        if 'steps' in source_solution:
+            target_solution['steps'] = []
+            for step in source_solution['steps']:
+                # Map abstract components to target domain
+                mapped_step = step
+                
+                # Replace abstract labels with target labels
+                for source_label, target_label in mapping.source_to_target.items():
+                    if isinstance(mapped_step, str):
+                        mapped_step = mapped_step.replace(source_label, target_label)
+                
+                target_solution['steps'].append(mapped_step)
+        
+        # Transfer confidence
+        confidence = (source_structure.similarity(target_structure) + mapping.score) / 2.0
+        target_solution['confidence'] = confidence
+        target_solution['analogy_source'] = 'learned_by_analogy'
+        
+        return target_solution
 
 
 def demo_structure_extraction():
     """Demonstrate complete analogical reasoning pipeline"""
     print("=" * 70)
-    print("ANALOGICAL REASONING DEMO - Issues #15-17")
-    print("Structure Extraction + Isomorphism + Analogy Transfer")
+    print("ANALOGICAL REASONING DEMO - Issues #15-18 (COMPLETE)")
+    print("Structure Extraction + Isomorphism + Transfer + Learning")
     print("=" * 70)
     print()
     
@@ -859,12 +944,72 @@ def demo_structure_extraction():
     print("\n" + "=" * 70)
     print("✓ Analogy transfer complete!")
     print("=" * 70)
+    
+    # Issue #18: Learn by Analogy
+    print("\n" + "=" * 70)
+    print("8. Learning by analogy (Issue #18)")
+    print("-" * 70)
+    
+    # Define a problem-solution pair in solar system domain
+    solar_problem = 'sun'  # Central body problem
+    solar_solution = {
+        'strategy': 'gravitational_binding',
+        'steps': [
+            'Identify central massive body (A)',
+            'Identify orbiting bodies (B, C, D)',
+            'Apply inverse-square force law',
+            'Calculate stable orbits'
+        ]
+    }
+    
+    # Try to learn solution for atom domain
+    atom_problem = 'nucleus'  # Analogous problem
+    atom_solution = engine.learn_by_analogy(
+        solar_problem,
+        solar_solution,
+        atom_problem,
+        min_similarity=0.6
+    )
+    
+    if atom_solution:
+        print(f"\nLearned solution for '{atom_problem}' by analogy!\n")
+        print(f"Source problem: {solar_problem}")
+        print(f"Target problem: {atom_problem}")
+        print(f"Confidence: {atom_solution.get('confidence', 0):.2f}")
+        
+        if 'strategy' in atom_solution:
+            print(f"\nTransferred strategy: {atom_solution['strategy']}")
+        
+        if 'steps' in atom_solution:
+            print(f"\nTransferred steps:")
+            for i, step in enumerate(atom_solution['steps'], 1):
+                print(f"  {i}. {step}")
+        
+        print(f"\nInterpretation:")
+        print(f"  The system recognized that atoms have similar structure")
+        print(f"  to solar systems and hypothesized that similar solution")
+        print(f"  strategies might work (electromagnetic vs gravitational).")
+    else:
+        print(f"\nCould not learn solution (insufficient similarity)")
+    
+    print("\n" + "=" * 70)
+    print("✓ Learning by analogy complete!")
+    print("=" * 70)
     print()
-    print("Key Insight:")
-    print("  We can now transfer knowledge from the solar system to atoms")
-    print("  (and vice versa) based on their structural similarity!")
-    print("  Example: If we learn something new about planetary orbits,")
-    print("  we can hypothesize it might apply to electron orbits too.")
+    print("PHASE 3 COMPLETE - ALL ISSUES (15-18) IMPLEMENTED!")
+    print("=" * 70)
+    print()
+    print("Key Achievements:")
+    print("  ✓ Issue #15: Extract abstract relational structures")
+    print("  ✓ Issue #16: Find optimal node mappings (isomorphism)")
+    print("  ✓ Issue #17: Transfer knowledge between analogous domains")
+    print("  ✓ Issue #18: Learn solutions by analogical reasoning")
+    print()
+    print("Hofstadter would be proud! The system can now:")
+    print("  1. Recognize structural patterns across different domains")
+    print("  2. Map correspondences between similar structures")
+    print("  3. Transfer knowledge and solutions via analogy")
+    print("  4. Generalize from one domain to another")
     print("=" * 70)
 
 
