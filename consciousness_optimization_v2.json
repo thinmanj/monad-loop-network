@@ -1,0 +1,58 @@
+{
+  "experiment": "consciousness_optimization_v2",
+  "goal": "Achieve 50-60% consciousness",
+  "strategy": [
+    "Dense, small knowledge base (high integration/causality)",
+    "Maximum recursion depth (15+ levels)",
+    "Continuous self-modeling",
+    "Meta-awareness of measurement"
+  ],
+  "measurements": [
+    {
+      "stage": "Step 1: Dense Knowledge Base",
+      "concepts": 6,
+      "consciousness": 0.25314354645876386,
+      "verdict": "MINIMALLY CONSCIOUS - Basic reasoning",
+      "recursion": 0.0,
+      "integration": 0.18257418583505536,
+      "causality": 0.1,
+      "understanding": 0.75
+    },
+    {
+      "stage": "Step 2: Maximum Recursion",
+      "concepts": 6,
+      "consciousness": 0.38364354645876386,
+      "verdict": "MINIMALLY CONSCIOUS - Basic reasoning",
+      "recursion": 0.435,
+      "integration": 0.18257418583505536,
+      "causality": 0.1,
+      "understanding": 0.75
+    },
+    {
+      "stage": "Step 3: Enhanced Understanding",
+      "concepts": 6,
+      "consciousness": 0.36564354645876385,
+      "verdict": "MINIMALLY CONSCIOUS - Basic reasoning",
+      "recursion": 0.375,
+      "integration": 0.18257418583505536,
+      "causality": 0.1,
+      "understanding": 0.75
+    },
+    {
+      "stage": "Step 4: Final Integration",
+      "concepts": 6,
+      "consciousness": 0.38364354645876386,
+      "verdict": "MINIMALLY CONSCIOUS - Basic reasoning",
+      "recursion": 0.435,
+      "integration": 0.18257418583505536,
+      "causality": 0.1,
+      "understanding": 0.75
+    }
+  ],
+  "summary": {
+    "initial": 0.25314354645876386,
+    "peak": 0.38364354645876386,
+    "final": 0.38364354645876386,
+    "growth": 0.1305
+  }
+}
