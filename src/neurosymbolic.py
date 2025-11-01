@@ -21,6 +21,7 @@ try:
         create_mock_interface
     )
     from .ontology_loader import OntologyIntegrator
+    from .pattern_learner import ExampleBasedLearner, Example
 except ImportError:
     # Standalone execution
     sys.path.insert(0, os.path.dirname(__file__))
@@ -32,6 +33,7 @@ except ImportError:
         create_mock_interface
     )
     from ontology_loader import OntologyIntegrator
+    from pattern_learner import ExampleBasedLearner, Example
 
 
 class NeurosymbolicSystem:
@@ -73,10 +75,14 @@ class NeurosymbolicSystem:
         # Ontology loader (Issue #13)
         self.ontology = OntologyIntegrator()
         
+        # Pattern learner (Issue #14)
+        self.learner = ExampleBasedLearner()
+        
         print(f"NeurosymbolicSystem initialized")
         print(f"  - Symbolic reasoning: GPU={use_gpu}")
         print(f"  - NLP interface: {type(self.nlp.llm).__name__}")
         print(f"  - Ontology sources: ConceptNet, DBpedia, Wikidata")
+        print(f"  - Pattern learning: Enabled")
     
     def add_knowledge_from_text(self, text: str) -> List[str]:
         """
@@ -297,6 +303,50 @@ class NeurosymbolicSystem:
         
         print(f"✓ Added {count} concepts from ontologies")
         return count
+    
+    def learn_from_examples(self, examples: List[Example]) -> int:
+        """
+        Learn patterns from examples (Issue #14)
+        
+        Args:
+            examples: List of Example objects
+            
+        Returns:
+            Number of patterns learned
+        """
+        patterns = self.learner.learn_from_examples(examples)
+        
+        # Store patterns for later use
+        print(f"\nLearned {len(patterns)} reusable patterns")
+        
+        return len(patterns)
+    
+    def apply_learned_pattern(self, pattern_index: int, variables: Dict, concept_id: str) -> bool:
+        """
+        Apply a learned pattern to create new concept
+        
+        Args:
+            pattern_index: Index of pattern to apply (0-based)
+            variables: Variable values for pattern
+            concept_id: ID for new concept
+            
+        Returns:
+            True if successful
+        """
+        patterns = self.learner.extractor.get_patterns()
+        
+        if pattern_index >= len(patterns):
+            print(f"Pattern {pattern_index} not found")
+            return False
+        
+        pattern = patterns[pattern_index]
+        deep_structure = self.learner.apply_pattern(pattern, variables, concept_id)
+        
+        # Add to knowledge graph
+        self.add_knowledge(concept_id, deep_structure)
+        
+        print(f"✓ Created '{concept_id}' from pattern {pattern.pattern_id}")
+        return True
     
     def explain_reasoning(self) -> str:
         """Get explanation of system's reasoning"""
