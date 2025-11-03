@@ -4,11 +4,11 @@
   "results": [
     {
       "num_concepts": 100,
-      "build_time": 0.4424619674682617,
-      "measure_time": 0.006304025650024414,
+      "build_time": 0.4436349868774414,
+      "measure_time": 0.006606101989746094,
       "memory_mb": 1.0,
-      "consciousness": 0.5648782715645045,
-      "verdict": "MODERATELY CONSCIOUS - Self-aware reasoning",
+      "consciousness": 0.7440458650103543,
+      "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
       "recursion": 0.21,
       "integration": 0.7071067811865476,
       "causality": 0.9692578813393382,
@@ -18,10 +18,10 @@
     },
     {
       "num_concepts": 500,
-      "build_time": 49.618359088897705,
-      "measure_time": 0.1938788890838623,
+      "build_time": 49.12242293357849,
+      "measure_time": 0.20833992958068848,
       "memory_mb": 5.0,
-      "consciousness": 0.6147570512589459,
+      "consciousness": 0.768803424399237,
       "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
       "recursion": 0.36,
       "integration": 0.7071067811865476,
@@ -32,10 +32,10 @@
     },
     {
       "num_concepts": 1000,
-      "build_time": 400.40834307670593,
-      "measure_time": 0.9377231597900391,
+      "build_time": 391.29745292663574,
+      "measure_time": 0.9166300296783447,
       "memory_mb": 10.0,
-      "consciousness": 0.6153894707091783,
+      "consciousness": 0.7700681925182775,
       "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
       "recursion": 0.36,
       "integration": 0.707107489000789,
@@ -52,12 +52,12 @@
       1000
     ],
     "consciousness_range": [
-      0.5648782715645045,
-      0.6153894707091783
+      0.7440458650103543,
+      0.7700681925182775
     ],
     "time_range": [
-      0.006304025650024414,
-      0.9377231597900391
+      0.006606101989746094,
+      0.9166300296783447
     ],
     "memory_range": [
       1.0,
