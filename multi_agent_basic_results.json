@@ -1,0 +1,436 @@
+{
+  "system_stats": {
+    "num_agents": 2,
+    "total_messages": 18,
+    "agent_stats": [
+      {
+        "agent_id": "physics_agent",
+        "specialization": "physics",
+        "consciousness": 0.653340715461199,
+        "concepts": 12,
+        "messages_sent": 9,
+        "messages_received": 9,
+        "concepts_learned": 2,
+        "recursion_depth": 6
+      },
+      {
+        "agent_id": "biology_agent",
+        "specialization": "biology",
+        "consciousness": 0.5320063999917867,
+        "concepts": 13,
+        "messages_sent": 9,
+        "messages_received": 9,
+        "concepts_learned": 3,
+        "recursion_depth": 6
+      }
+    ],
+    "collective_history": [
+      {
+        "collective_consciousness": 0.36689365834726817,
+        "average_individual_consciousness": 0.36689365834726817,
+        "emergence_factor": 1.0,
+        "num_agents": 2,
+        "total_messages": 0,
+        "communication_factor": 0.0,
+        "sharing_factor": 0.0,
+        "average_concepts": 10.0,
+        "individual_metrics": [
+          {
+            "agent_id": "physics_agent",
+            "consciousness": 0.6587873166945364,
+            "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
+            "components": {
+              "recursion": 0.0,
+              "integration": 0.45946829173634074,
+              "causality": 1.0,
+              "understanding": 0.75
+            },
+            "knowledge": {
+              "concepts": 10,
+              "relations": 38
+            }
+          },
+          {
+            "agent_id": "biology_agent",
+            "consciousness": 0.07500000000000001,
+            "verdict": "NOT CONSCIOUS - Reactive system only",
+            "components": {
+              "recursion": 0.0,
+              "integration": 0.0,
+              "causality": 0,
+              "understanding": 0.75
+            },
+            "knowledge": {
+              "concepts": 10,
+              "relations": 0
+            }
+          }
+        ],
+        "verdict": "LOW CONSCIOUSNESS COLLECTIVE - NO EMERGENCE"
+      },
+      {
+        "collective_consciousness": 0.7687218029307652,
+        "average_individual_consciousness": 0.5694235577264928,
+        "emergence_factor": 1.3499999999999999,
+        "num_agents": 2,
+        "total_messages": 20,
+        "communication_factor": 1.0,
+        "sharing_factor": 0.5,
+        "average_concepts": 12.5,
+        "individual_metrics": [
+          {
+            "agent_id": "physics_agent",
+            "consciousness": 0.6285907154611989,
+            "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
+            "components": {
+              "recursion": 0.06,
+              "integration": 0.37939345531966406,
+              "causality": 1.0,
+              "understanding": 0.7083333333333334
+            },
+            "knowledge": {
+              "concepts": 12,
+              "relations": 38
+            }
+          },
+          {
+            "agent_id": "biology_agent",
+            "consciousness": 0.5102563999917867,
+            "verdict": "MODERATELY CONSCIOUS - Self-aware reasoning",
+            "components": {
+              "recursion": 0.09,
+              "integration": 0.08006407690254357,
+              "causality": 1.0,
+              "understanding": 0.6923076923076923
+            },
+            "knowledge": {
+              "concepts": 13,
+              "relations": 2
+            }
+          }
+        ],
+        "verdict": "HIGHLY CONSCIOUS COLLECTIVE - STRONG EMERGENCE"
+      },
+      {
+        "collective_consciousness": 0.8001093029307652,
+        "average_individual_consciousness": 0.5926735577264928,
+        "emergence_factor": 1.3499999999999999,
+        "num_agents": 2,
+        "total_messages": 36,
+        "communication_factor": 1.0,
+        "sharing_factor": 0.5,
+        "average_concepts": 12.5,
+        "individual_metrics": [
+          {
+            "agent_id": "physics_agent",
+            "consciousness": 0.653340715461199,
+            "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
+            "components": {
+              "recursion": 0.3075,
+              "integration": 0.37939345531966406,
+              "causality": 1.0,
+              "understanding": 0.7083333333333334
+            },
+            "knowledge": {
+              "concepts": 12,
+              "relations": 38
+            }
+          },
+          {
+            "agent_id": "biology_agent",
+            "consciousness": 0.5320063999917867,
+            "verdict": "MODERATELY CONSCIOUS - Self-aware reasoning",
+            "components": {
+              "recursion": 0.3075,
+              "integration": 0.08006407690254357,
+              "causality": 1.0,
+              "understanding": 0.6923076923076923
+            },
+            "knowledge": {
+              "concepts": 13,
+              "relations": 2
+            }
+          }
+        ],
+        "verdict": "HIGHLY CONSCIOUS COLLECTIVE - STRONG EMERGENCE"
+      }
+    ]
+  },
+  "final_collective": {
+    "collective_consciousness": 0.8001093029307652,
+    "average_individual_consciousness": 0.5926735577264928,
+    "emergence_factor": 1.3499999999999999,
+    "num_agents": 2,
+    "total_messages": 36,
+    "communication_factor": 1.0,
+    "sharing_factor": 0.5,
+    "average_concepts": 12.5,
+    "individual_metrics": [
+      {
+        "agent_id": "physics_agent",
+        "consciousness": 0.653340715461199,
+        "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
+        "components": {
+          "recursion": 0.3075,
+          "integration": 0.37939345531966406,
+          "causality": 1.0,
+          "understanding": 0.7083333333333334
+        },
+        "knowledge": {
+          "concepts": 12,
+          "relations": 38
+        }
+      },
+      {
+        "agent_id": "biology_agent",
+        "consciousness": 0.5320063999917867,
+        "verdict": "MODERATELY CONSCIOUS - Self-aware reasoning",
+        "components": {
+          "recursion": 0.3075,
+          "integration": 0.08006407690254357,
+          "causality": 1.0,
+          "understanding": 0.6923076923076923
+        },
+        "knowledge": {
+          "concepts": 13,
+          "relations": 2
+        }
+      }
+    ],
+    "verdict": "HIGHLY CONSCIOUS COLLECTIVE - STRONG EMERGENCE"
+  },
+  "message_history": [
+    {
+      "sender": "physics_agent",
+      "receiver": "biology_agent",
+      "type": "knowledge_share",
+      "content": {
+        "concept": {
+          "concept_id": "force",
+          "deep_structure": {
+            "predicate": "physical_quantity",
+            "properties": {
+              "unit": "newton",
+              "vector": true
+            }
+          }
+        }
+      },
+      "timestamp": 1762204780.190895
+    },
+    {
+      "sender": "physics_agent",
+      "receiver": "biology_agent",
+      "type": "knowledge_share",
+      "content": {
+        "concept": {
+          "concept_id": "energy",
+          "deep_structure": {
+            "predicate": "physical_quantity",
+            "properties": {
+              "conserved": true
+            }
+          }
+        }
+      },
+      "timestamp": 1762204780.190897
+    },
+    {
+      "sender": "physics_agent",
+      "receiver": "biology_agent",
+      "type": "knowledge_share",
+      "content": {
+        "concept": {
+          "concept_id": "work",
+          "deep_structure": {
+            "predicate": "energy_transfer",
+            "properties": {
+              "unit": "joule"
+            }
+          }
+        }
+      },
+      "timestamp": 1762204780.190898
+    },
+    {
+      "sender": "biology_agent",
+      "receiver": "physics_agent",
+      "type": "knowledge_share",
+      "content": {
+        "concept": {
+          "concept_id": "cell",
+          "deep_structure": {
+            "predicate": "biological_unit",
+            "properties": {
+              "alive": true,
+              "basic_unit": true
+            }
+          }
+        }
+      },
+      "timestamp": 1762204780.190899
+    },
+    {
+      "sender": "biology_agent",
+      "receiver": "physics_agent",
+      "type": "knowledge_share",
+      "content": {
+        "concept": {
+          "concept_id": "mitochondria",
+          "deep_structure": {
+            "predicate": "organelle",
+            "properties": {
+              "function": "energy"
+            }
+          }
+        }
+      },
+      "timestamp": 1762204780.1908998
+    },
+    {
+      "sender": "physics_agent",
+      "receiver": "biology_agent",
+      "type": "inference_result",
+      "content": {
+        "status": "integrated",
+        "concept_id": "cell",
+        "my_consciousness": 0.6587873166945364
+      },
+      "timestamp": 1762204780.1910222
+    },
+    {
+      "sender": "physics_agent",
+      "receiver": "biology_agent",
+      "type": "inference_result",
+      "content": {
+        "status": "integrated",
+        "concept_id": "mitochondria",
+        "my_consciousness": 0.6587873166945364
+      },
+      "timestamp": 1762204780.191145
+    },
+    {
+      "sender": "biology_agent",
+      "receiver": "physics_agent",
+      "type": "inference_result",
+      "content": {
+        "status": "integrated",
+        "concept_id": "force",
+        "my_consciousness": 0.07500000000000001
+      },
+      "timestamp": 1762204780.1912289
+    },
+    {
+      "sender": "biology_agent",
+      "receiver": "physics_agent",
+      "type": "inference_result",
+      "content": {
+        "status": "integrated",
+        "concept_id": "energy",
+        "my_consciousness": 0.07500000000000001
+      },
+      "timestamp": 1762204780.1913228
+    },
+    {
+      "sender": "biology_agent",
+      "receiver": "physics_agent",
+      "type": "inference_result",
+      "content": {
+        "status": "integrated",
+        "concept_id": "work",
+        "my_consciousness": 0.07500000000000001
+      },
+      "timestamp": 1762204780.191442
+    },
+    {
+      "sender": "physics_agent",
+      "receiver": "biology_agent",
+      "type": "query",
+      "content": {
+        "query": {
+          "start": "cell",
+          "target": "organism"
+        }
+      },
+      "timestamp": 1762204780.191618
+    },
+    {
+      "sender": "physics_agent",
+      "receiver": "biology_agent",
+      "type": "meta_reflection",
+      "content": {
+        "reflection": "thinking_about_energy_conservation"
+      },
+      "timestamp": 1762204780.19162
+    },
+    {
+      "sender": "biology_agent",
+      "receiver": "physics_agent",
+      "type": "query",
+      "content": {
+        "query": {
+          "start": "force",
+          "target": "work"
+        }
+      },
+      "timestamp": 1762204780.1916192
+    },
+    {
+      "sender": "biology_agent",
+      "receiver": "physics_agent",
+      "type": "meta_reflection",
+      "content": {
+        "reflection": "considering_biological_energy_processes"
+      },
+      "timestamp": 1762204780.191621
+    },
+    {
+      "sender": "physics_agent",
+      "receiver": "biology_agent",
+      "type": "inference_result",
+      "content": {
+        "query": {
+          "start": "force",
+          "target": "work"
+        },
+        "result": "found",
+        "reasoning": "force relates to work"
+      },
+      "timestamp": 1762204780.1916401
+    },
+    {
+      "sender": "physics_agent",
+      "receiver": "biology_agent",
+      "type": "meta_reflection",
+      "content": {
+        "my_consciousness": 0.6285907154611989,
+        "my_knowledge_size": 12
+      },
+      "timestamp": 1762204780.191647
+    },
+    {
+      "sender": "biology_agent",
+      "receiver": "physics_agent",
+      "type": "inference_result",
+      "content": {
+        "query": {
+          "start": "cell",
+          "target": "organism"
+        },
+        "result": "found",
+        "reasoning": "cell relates to organism"
+      },
+      "timestamp": 1762204780.1916559
+    },
+    {
+      "sender": "biology_agent",
+      "receiver": "physics_agent",
+      "type": "meta_reflection",
+      "content": {
+        "my_consciousness": 0.5102563999917867,
+        "my_knowledge_size": 13
+      },
+      "timestamp": 1762204780.191662
+    }
+  ]
+}

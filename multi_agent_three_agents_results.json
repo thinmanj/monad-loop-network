@@ -1,0 +1,501 @@
+{
+  "system_stats": {
+    "num_agents": 3,
+    "total_messages": 24,
+    "agent_stats": [
+      {
+        "agent_id": "physics_agent",
+        "specialization": "physics",
+        "consciousness": 0.6348333333333332,
+        "concepts": 10,
+        "messages_sent": 8,
+        "messages_received": 8,
+        "concepts_learned": 2,
+        "recursion_depth": 6
+      },
+      {
+        "agent_id": "biology_agent",
+        "specialization": "biology",
+        "consciousness": 0.10149999999999999,
+        "concepts": 10,
+        "messages_sent": 8,
+        "messages_received": 8,
+        "concepts_learned": 2,
+        "recursion_depth": 6
+      },
+      {
+        "agent_id": "math_agent",
+        "specialization": "mathematics",
+        "consciousness": 0.10149999999999999,
+        "concepts": 10,
+        "messages_sent": 8,
+        "messages_received": 8,
+        "concepts_learned": 2,
+        "recursion_depth": 6
+      }
+    ],
+    "collective_history": [
+      {
+        "collective_consciousness": 0.2646769503152344,
+        "average_individual_consciousness": 0.2646769503152344,
+        "emergence_factor": 1.0,
+        "num_agents": 3,
+        "total_messages": 0,
+        "communication_factor": 0.0,
+        "sharing_factor": 0.0,
+        "average_concepts": 8.0,
+        "individual_metrics": [
+          {
+            "agent_id": "physics_agent",
+            "consciousness": 0.6440308509457033,
+            "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
+            "components": {
+              "recursion": 0.0,
+              "integration": 0.4225771273642583,
+              "causality": 1.0,
+              "understanding": 0.75
+            },
+            "knowledge": {
+              "concepts": 8,
+              "relations": 20
+            }
+          },
+          {
+            "agent_id": "biology_agent",
+            "consciousness": 0.07500000000000001,
+            "verdict": "NOT CONSCIOUS - Reactive system only",
+            "components": {
+              "recursion": 0.0,
+              "integration": 0.0,
+              "causality": 0,
+              "understanding": 0.75
+            },
+            "knowledge": {
+              "concepts": 8,
+              "relations": 0
+            }
+          },
+          {
+            "agent_id": "math_agent",
+            "consciousness": 0.07500000000000001,
+            "verdict": "NOT CONSCIOUS - Reactive system only",
+            "components": {
+              "recursion": 0.0,
+              "integration": 0.0,
+              "causality": 0,
+              "understanding": 0.75
+            },
+            "knowledge": {
+              "concepts": 8,
+              "relations": 0
+            }
+          }
+        ],
+        "verdict": "LOW CONSCIOUSNESS COLLECTIVE - NO EMERGENCE"
+      },
+      {
+        "collective_consciousness": 0.3686466666666666,
+        "average_individual_consciousness": 0.2792777777777778,
+        "emergence_factor": 1.3199999999999998,
+        "num_agents": 3,
+        "total_messages": 48,
+        "communication_factor": 1.0,
+        "sharing_factor": 0.4,
+        "average_concepts": 10.0,
+        "individual_metrics": [
+          {
+            "agent_id": "physics_agent",
+            "consciousness": 0.6348333333333332,
+            "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
+            "components": {
+              "recursion": 0.315,
+              "integration": 0.3333333333333333,
+              "causality": 1.0,
+              "understanding": 0.7
+            },
+            "knowledge": {
+              "concepts": 10,
+              "relations": 20
+            }
+          },
+          {
+            "agent_id": "biology_agent",
+            "consciousness": 0.10149999999999999,
+            "verdict": "NOT CONSCIOUS - Reactive system only",
+            "components": {
+              "recursion": 0.315,
+              "integration": 0.0,
+              "causality": 0,
+              "understanding": 0.7
+            },
+            "knowledge": {
+              "concepts": 10,
+              "relations": 0
+            }
+          },
+          {
+            "agent_id": "math_agent",
+            "consciousness": 0.10149999999999999,
+            "verdict": "NOT CONSCIOUS - Reactive system only",
+            "components": {
+              "recursion": 0.315,
+              "integration": 0.0,
+              "causality": 0,
+              "understanding": 0.7
+            },
+            "knowledge": {
+              "concepts": 10,
+              "relations": 0
+            }
+          }
+        ],
+        "verdict": "LOW CONSCIOUSNESS COLLECTIVE - STRONG EMERGENCE"
+      }
+    ]
+  },
+  "final_collective": {
+    "collective_consciousness": 0.3686466666666666,
+    "average_individual_consciousness": 0.2792777777777778,
+    "emergence_factor": 1.3199999999999998,
+    "num_agents": 3,
+    "total_messages": 48,
+    "communication_factor": 1.0,
+    "sharing_factor": 0.4,
+    "average_concepts": 10.0,
+    "individual_metrics": [
+      {
+        "agent_id": "physics_agent",
+        "consciousness": 0.6348333333333332,
+        "verdict": "HIGHLY CONSCIOUS - Meta-cognitive intelligence",
+        "components": {
+          "recursion": 0.315,
+          "integration": 0.3333333333333333,
+          "causality": 1.0,
+          "understanding": 0.7
+        },
+        "knowledge": {
+          "concepts": 10,
+          "relations": 20
+        }
+      },
+      {
+        "agent_id": "biology_agent",
+        "consciousness": 0.10149999999999999,
+        "verdict": "NOT CONSCIOUS - Reactive system only",
+        "components": {
+          "recursion": 0.315,
+          "integration": 0.0,
+          "causality": 0,
+          "understanding": 0.7
+        },
+        "knowledge": {
+          "concepts": 10,
+          "relations": 0
+        }
+      },
+      {
+        "agent_id": "math_agent",
+        "consciousness": 0.10149999999999999,
+        "verdict": "NOT CONSCIOUS - Reactive system only",
+        "components": {
+          "recursion": 0.315,
+          "integration": 0.0,
+          "causality": 0,
+          "understanding": 0.7
+        },
+        "knowledge": {
+          "concepts": 10,
+          "relations": 0
+        }
+      }
+    ],
+    "verdict": "LOW CONSCIOUSNESS COLLECTIVE - STRONG EMERGENCE"
+  },
+  "message_history": [
+    {
+      "sender": "physics_agent",
+      "receiver": "biology_agent",
+      "type": "knowledge_share",
+      "content": {
+        "concept": {
+          "concept_id": "energy",
+          "deep_structure": {
+            "predicate": "physical_quantity",
+            "properties": {
+              "conserved": true
+            }
+          }
+        }
+      },
+      "timestamp": 1762204780.196352
+    },
+    {
+      "sender": "physics_agent",
+      "receiver": "math_agent",
+      "type": "knowledge_share",
+      "content": {
+        "concept": {
+          "concept_id": "force",
+          "deep_structure": {
+            "predicate": "physical_quantity",
+            "properties": {
+              "unit": "newton",
+              "vector": true
+            }
+          }
+        }
+      },
+      "timestamp": 1762204780.196356
+    },
+    {
+      "sender": "biology_agent",
+      "receiver": "physics_agent",
+      "type": "knowledge_share",
+      "content": {
+        "concept": {
+          "concept_id": "cell",
+          "deep_structure": {
+            "predicate": "biological_unit",
+            "properties": {
+              "alive": true,
+              "basic_unit": true
+            }
+          }
+        }
+      },
+      "timestamp": 1762204780.196359
+    },
+    {
+      "sender": "biology_agent",
+      "receiver": "math_agent",
+      "type": "knowledge_share",
+      "content": {
+        "concept": {
+          "concept_id": "organism",
+          "deep_structure": {
+            "predicate": "living_thing",
+            "properties": {
+              "composed_of": "cells"
+            }
+          }
+        }
+      },
+      "timestamp": 1762204780.196363
+    },
+    {
+      "sender": "math_agent",
+      "receiver": "physics_agent",
+      "type": "knowledge_share",
+      "content": {
+        "concept": {
+          "concept_id": "function",
+          "deep_structure": {
+            "predicate": "mapping",
+            "properties": {
+              "domain": "set",
+              "range": "set"
+            }
+          }
+        }
+      },
+      "timestamp": 1762204780.196366
+    },
+    {
+      "sender": "math_agent",
+      "receiver": "biology_agent",
+      "type": "knowledge_share",
+      "content": {
+        "concept": {
+          "concept_id": "derivative",
+          "deep_structure": {
+            "predicate": "operation",
+            "properties": {
+              "measures": "rate_of_change"
+            }
+          }
+        }
+      },
+      "timestamp": 1762204780.196368
+    },
+    {
+      "sender": "physics_agent",
+      "receiver": "biology_agent",
+      "type": "inference_result",
+      "content": {
+        "status": "integrated",
+        "concept_id": "cell",
+        "my_consciousness": 0.6440308509457033
+      },
+      "timestamp": 1762204780.196589
+    },
+    {
+      "sender": "physics_agent",
+      "receiver": "math_agent",
+      "type": "inference_result",
+      "content": {
+        "status": "integrated",
+        "concept_id": "function",
+        "my_consciousness": 0.6440308509457033
+      },
+      "timestamp": 1762204780.196824
+    },
+    {
+      "sender": "biology_agent",
+      "receiver": "physics_agent",
+      "type": "inference_result",
+      "content": {
+        "status": "integrated",
+        "concept_id": "energy",
+        "my_consciousness": 0.07500000000000001
+      },
+      "timestamp": 1762204780.19698
+    },
+    {
+      "sender": "biology_agent",
+      "receiver": "math_agent",
+      "type": "inference_result",
+      "content": {
+        "status": "integrated",
+        "concept_id": "derivative",
+        "my_consciousness": 0.07500000000000001
+      },
+      "timestamp": 1762204780.197203
+    },
+    {
+      "sender": "math_agent",
+      "receiver": "physics_agent",
+      "type": "inference_result",
+      "content": {
+        "status": "integrated",
+        "concept_id": "force",
+        "my_consciousness": 0.07500000000000001
+      },
+      "timestamp": 1762204780.197377
+    },
+    {
+      "sender": "math_agent",
+      "receiver": "biology_agent",
+      "type": "inference_result",
+      "content": {
+        "status": "integrated",
+        "concept_id": "organism",
+        "my_consciousness": 0.07500000000000001
+      },
+      "timestamp": 1762204780.1976461
+    },
+    {
+      "sender": "physics_agent",
+      "receiver": "biology_agent",
+      "type": "meta_reflection",
+      "content": {
+        "cross_domain_reflection": true
+      },
+      "timestamp": 1762204780.1976619
+    },
+    {
+      "sender": "physics_agent",
+      "receiver": "math_agent",
+      "type": "meta_reflection",
+      "content": {
+        "cross_domain_reflection": true
+      },
+      "timestamp": 1762204780.197664
+    },
+    {
+      "sender": "biology_agent",
+      "receiver": "physics_agent",
+      "type": "meta_reflection",
+      "content": {
+        "cross_domain_reflection": true
+      },
+      "timestamp": 1762204780.1976671
+    },
+    {
+      "sender": "biology_agent",
+      "receiver": "math_agent",
+      "type": "meta_reflection",
+      "content": {
+        "cross_domain_reflection": true
+      },
+      "timestamp": 1762204780.197669
+    },
+    {
+      "sender": "math_agent",
+      "receiver": "physics_agent",
+      "type": "meta_reflection",
+      "content": {
+        "cross_domain_reflection": true
+      },
+      "timestamp": 1762204780.197672
+    },
+    {
+      "sender": "math_agent",
+      "receiver": "biology_agent",
+      "type": "meta_reflection",
+      "content": {
+        "cross_domain_reflection": true
+      },
+      "timestamp": 1762204780.197674
+    },
+    {
+      "sender": "physics_agent",
+      "receiver": "biology_agent",
+      "type": "meta_reflection",
+      "content": {
+        "my_consciousness": 0.6440308509457033,
+        "my_knowledge_size": 10
+      },
+      "timestamp": 1762204780.197726
+    },
+    {
+      "sender": "physics_agent",
+      "receiver": "math_agent",
+      "type": "meta_reflection",
+      "content": {
+        "my_consciousness": 0.6440308509457033,
+        "my_knowledge_size": 10
+      },
+      "timestamp": 1762204780.197802
+    },
+    {
+      "sender": "biology_agent",
+      "receiver": "physics_agent",
+      "type": "meta_reflection",
+      "content": {
+        "my_consciousness": 0.07500000000000001,
+        "my_knowledge_size": 10
+      },
+      "timestamp": 1762204780.197855
+    },
+    {
+      "sender": "biology_agent",
+      "receiver": "math_agent",
+      "type": "meta_reflection",
+      "content": {
+        "my_consciousness": 0.07500000000000001,
+        "my_knowledge_size": 10
+      },
+      "timestamp": 1762204780.1978781
+    },
+    {
+      "sender": "math_agent",
+      "receiver": "physics_agent",
+      "type": "meta_reflection",
+      "content": {
+        "my_consciousness": 0.07500000000000001,
+        "my_knowledge_size": 10
+      },
+      "timestamp": 1762204780.197918
+    },
+    {
+      "sender": "math_agent",
+      "receiver": "biology_agent",
+      "type": "meta_reflection",
+      "content": {
+        "my_consciousness": 0.07500000000000001,
+        "my_knowledge_size": 10
+      },
+      "timestamp": 1762204780.1979342
+    }
+  ]
+}
