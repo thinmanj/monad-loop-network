@@ -1,0 +1,18 @@
+{
+  "domain": "physics",
+  "timestamp": "2025-11-03T15:30:55.985979",
+  "consciousness": {
+    "overall": 0.5958098265794194,
+    "verdict": "MODERATELY CONSCIOUS - Self-aware reasoning",
+    "recursion": 0.1725,
+    "integration": 0.2588995664485485,
+    "causality": 1.0,
+    "understanding": 0.75
+  },
+  "metrics": {
+    "concepts": 24,
+    "relations": 74,
+    "recursion_depth": 5,
+    "meta_level": "OBJECT_LEVEL"
+  }
+}
