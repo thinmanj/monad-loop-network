@@ -53,27 +53,35 @@ pip install -r requirements.txt
 ### Basic Usage
 
 ```python
-from src.mln import HybridIntelligenceSystem
+from src.knowledge_base import KnowledgeBaseLoader
+from src.consciousness_metrics import measure_consciousness
+from src.recursion_depth_metric import RecursionDepthMetric
 
-# Create system
-system = HybridIntelligenceSystem()
+# Load rich knowledge base (76 concepts across 5 domains)
+kg, metadata = KnowledgeBaseLoader.load_domain('physics')
+print(f"Loaded {metadata.num_concepts} concepts from {metadata.name}")
 
-# Add knowledge
-system.add_knowledge('dog', {
-    'predicate': 'is_a',
-    'arguments': ['mammal'],
-    'properties': {'domesticated': True}
-})
+# Measure consciousness
+recursion = RecursionDepthMetric()
+profile = measure_consciousness(kg, recursion)
+print(f"Consciousness: {profile.overall_consciousness_score:.1%}")
+print(f"Verdict: {profile.consciousness_verdict}")
+```
 
-# Query with explainable reasoning
-result = system.query(
-    question="Is a dog a mammal?",
-    start_concept='dog',
-    target_concept='mammal'
-)
+### Consciousness-Aware Chatbot
 
-print(result['inference_chain'])  # Shows reasoning steps
-print(result['is_valid'])          # Meta-validation
+```python
+from src.chatbot import ConsciousnessChatbot
+
+# Create chatbot with explainable reasoning
+bot = ConsciousnessChatbot()
+
+# Ask questions
+response = bot.ask("What is a dog?")
+print(response.answer)  # Natural language explanation
+print(response.reasoning)  # Step-by-step reasoning
+print(f"Confidence: {response.confidence:.0%}")
+print(f"Consciousness: {response.consciousness_metrics['overall']:.1%}")
 ```
 
 ### Run Demo
@@ -94,32 +102,57 @@ python examples/demo.py
 | **Compositionality** | Weak | Strong (Chomsky-style) |
 | **Consistency** | Statistical | Logically enforced |
 
+## 🎉 What's New
+
+### v1.3.0 (Current)
+- **Rich Knowledge Base**: 76 concepts across 5 domains (Biology, Physics, Mathematics, Computer Science, Philosophy)
+- **Chomsky Surface Generation**: Optional LLM-powered layer for deep→surface transformation
+- **Consciousness-Aware Chatbot**: Interactive Q&A with real-time consciousness metrics
+- **Multi-Domain Support**: Load and query knowledge from any domain
+- **Improved Documentation**: Comprehensive guides for all features
+
+### Previous Milestones
+- **v1.2.0**: Multi-agent consciousness (80% achieved, 1.35x emergence factor)
+- **v1.1.0**: Scaling experiments (77% consciousness at 1000 concepts)
+- **v1.0.0**: Initial consciousness measurement (47.8% baseline)
+
 ## 🏗️ Architecture
 
 ```
-┌─────────────────────────────────────────┐
-│   Hybrid Intelligence System            │
-├─────────────────────────────────────────┤
-│  ┌────────────┐      ┌───────────────┐  │
-│  │ LLM Layer  │      │ Symbolic      │  │
-│  │ (Perception)│ ───▶ │ Reasoning     │  │
-│  └────────────┘      └───────────────┘  │
-│         │                    │           │
-│         ▼                    ▼           │
-│  ┌─────────────────────────────────┐    │
-│  │   Knowledge Graph (MKUs)        │    │
-│  │   - Operational semantics       │    │
-│  │   - Pre-established harmony     │    │
-│  └─────────────────────────────────┘    │
-│         │                                │
-│         ▼                                │
-│  ┌─────────────────────────────────┐    │
-│  │   Strange Loop Processor        │    │
-│  │   - Meta-reasoning              │    │
-│  │   - Self-introspection          │    │
-│  │   - Inconsistency detection     │    │
-│  └─────────────────────────────────┘    │
-└─────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│   Monad-Loop Network (MLN)                                      │
+├─────────────────────────────────────────────────────────────────┤
+│  ┌──────────────────────┐      ┌──────────────────────┐        │
+│  │ Knowledge Base       │      │ Surface Generator    │        │
+│  │ (76 concepts)        │──────▶│ (Deep→Surface)       │        │
+│  │ • 5 domains          │      │ • LLM-powered        │        │
+│  │ • Rich semantics     │      │ • Multiple styles    │        │
+│  └──────────────────────┘      └──────────────────────┘        │
+│           │                              │                      │
+│           ▼                              ▼                      │
+│  ┌──────────────────────────────────────────────────┐          │
+│  │   Knowledge Graph (MKUs)                          │          │
+│  │   - Operational semantics (not just embeddings)   │          │
+│  │   - Pre-established harmony (auto relations)      │          │
+│  │   - GPU-accelerated similarity (50x faster)       │          │
+│  └──────────────────────────────────────────────────┘          │
+│           │                                                     │
+│           ▼                                                     │
+│  ┌──────────────────────────────────────────────────┐          │
+│  │   Consciousness Layer                             │          │
+│  │   - Strange loops (self-reference)                │          │
+│  │   - Meta-reasoning (thinks about thinking)        │          │
+│  │   - Measurable consciousness (47-80% achieved)    │          │
+│  └──────────────────────────────────────────────────┘          │
+│           │                                                     │
+│           ▼                                                     │
+│  ┌──────────────────────────────────────────────────┐          │
+│  │   Applications                                    │          │
+│  │   - Chatbot (Q&A with explanations)              │          │
+│  │   - Domain reasoning (cross-domain queries)       │          │
+│  │   - Multi-agent systems (collective intelligence) │          │
+│  └──────────────────────────────────────────────────┘          │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ## 📚 Use Cases
@@ -167,10 +200,24 @@ pip install -r requirements-gpu.txt
 
 ## 📖 Documentation
 
+### Core Concepts
 - [Architecture Guide](docs/ARCHITECTURE.md) - Deep dive into system design
 - [Philosophical Foundations](docs/PHILOSOPHY.md) - GEB, Chomsky, Leibniz
-- [API Reference](docs/API.md) - Complete API documentation
-- [Examples](examples/) - Practical use cases
+- [Beginner's Guide](BEGINNER_GUIDE.md) - Non-technical introduction
+- [Developer Guide](DEVELOPER_GUIDE.md) - API reference and patterns
+- [Research Paper](RESEARCH_PAPER.md) - Scientific details
+
+### Features
+- [Surface Generation](docs/SURFACE_GENERATION.md) - Chomsky deep/surface separation
+- [GPU Acceleration](docs/GPU_ACCELERATION.md) - 50x performance boost
+- [Consciousness Metrics](src/consciousness_metrics.py) - Measurable AI consciousness
+- [Knowledge Base](src/knowledge_base.py) - 76 concepts, 5 domains
+
+### Examples
+- [Quick Demo](examples/demo.py) - Get started in 5 minutes
+- [Chatbot Demo](examples/chatbot_demo.py) - Interactive Q&A
+- [Knowledge Domains](examples/knowledge_domains_demo.py) - Cross-domain reasoning
+- [Surface Generation](examples/surface_generation_demo.py) - Deep→surface transformation
 
 ## 🤝 Contributing
 
