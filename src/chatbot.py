@@ -23,10 +23,12 @@ try:
     from .mln import KnowledgeGraph, MonadicKnowledgeUnit, InferenceChain
     from .consciousness_metrics import measure_consciousness
     from .recursion_depth_metric import RecursionDepthMetric
+    from .surface_generator import SurfaceGenerator, SurfaceGenerationConfig
 except ImportError:
     from mln import KnowledgeGraph, MonadicKnowledgeUnit, InferenceChain
     from consciousness_metrics import measure_consciousness
     from recursion_depth_metric import RecursionDepthMetric
+    from surface_generator import SurfaceGenerator, SurfaceGenerationConfig
 
 
 @dataclass
@@ -44,15 +46,20 @@ class ConsciousnessChatbot:
     A chatbot that is aware of its own consciousness and reasoning
     """
     
-    def __init__(self, use_gpu: bool = False):
+    def __init__(self, use_gpu: bool = False, surface_config: Optional[SurfaceGenerationConfig] = None):
         """
         Initialize the conscious chatbot
         
         Args:
             use_gpu: Whether to use GPU acceleration
+            surface_config: Optional configuration for LLM-powered surface generation.
+                          If None, uses built-in transformational rules.
         """
         self.knowledge_graph = KnowledgeGraph(use_gpu=use_gpu)
         self.recursion_metric = RecursionDepthMetric()
+        
+        # Optional surface generator for Chomsky deep→surface transformation
+        self.surface_generator = SurfaceGenerator(surface_config)
         
         # Conversation history
         self.conversation_history: List[Dict[str, str]] = []
@@ -248,31 +255,31 @@ class ConsciousnessChatbot:
         predicate = mku.deep_structure.get('predicate', 'thing')
         properties = mku.deep_structure.get('properties', {})
         
-        # Build explanation
-        explanation = f"{concept.capitalize()} is a {predicate}"
+        # Generate surface form using Chomsky transformational grammar
+        mku_data = {
+            'concept_id': concept,
+            'predicate': predicate,
+            'properties': properties,
+            'relations': mku.relations
+        }
+        
+        # Use surface generator (LLM if configured, built-in otherwise)
+        explanation = self.surface_generator.generate_from_mku(mku_data, style='conversational')
         
         reasoning_steps = [
             f"Retrieved concept '{concept}' from knowledge graph",
             f"Predicate: {predicate}",
-            f"Properties: {properties}"
+            f"Properties: {len(properties)} attributes",
+            f"Relations: {sum(len(r) for r in mku.relations.values())} connections",
+            "Applied Chomsky transformational grammar: deep structure → surface form"
         ]
-        
-        if properties:
-            prop_list = ', '.join(f"{k}: {v}" for k, v in list(properties.items())[:3])
-            explanation += f" with properties: {prop_list}"
-        
-        # Check relationships
-        if mku.relations:
-            total_relations = sum(len(r) for r in mku.relations.values())
-            explanation += f". It has {total_relations} relationships with other concepts."
-            reasoning_steps.append(f"Found {total_relations} relationships")
         
         return ChatResponse(
             answer=explanation,
             reasoning=reasoning_steps,
             confidence=0.95,
             consciousness_metrics=self._get_consciousness_snapshot(),
-            meta_commentary="I synthesized this explanation from my structured knowledge representation."
+            meta_commentary="I synthesized this explanation using transformational grammar from deep to surface structure."
         )
     
     def _get_consciousness_snapshot(self) -> Dict[str, Any]:
